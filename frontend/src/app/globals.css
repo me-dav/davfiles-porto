@@ -1,0 +1,78 @@
+@tailwind utilities;
+
+/* ─── Fonts ──────────────────────────────────────────────────────────────── */
+/* Download from fontshare.com → place in public/fonts/ */
+
+@font-face {
+  font-family: 'canopee';
+  src: url('/fonts/Canopee-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'satoshi';
+  src: url('/fonts/satoshi-Variable.woff2') format('woff2');
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: #0E0E0F;
+  color: #F7F5F3;
+  font-family: 'editorial', system-ui, sans-serif;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* ─── Selection ──────────────────────────────────────────────────────────── */
+::selection {
+  background-color: #2E2E30;
+  color: #F7F5F3;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar          { width: 3px; height: 3px; }
+::-webkit-scrollbar-track    { background: #0E0E0F; }
+::-webkit-scrollbar-thumb    { background: #2E2E30; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #5C5957; }
+
+/* ─── Focus ──────────────────────────────────────────────────────────────── */
+:focus-visible {
+  outline: 1px solid #BFBAB6;
+  outline-offset: 3px;
+}
+
+/* ─── Typography prose overrides (for journal/project body) ─────────────── */
+.prose {
+  --tw-prose-body:    #BFBAB6;
+  --tw-prose-headings:#F7F5F3;
+  --tw-prose-links:   #F7F5F3;
+  --tw-prose-bold:    #F7F5F3;
+  --tw-prose-quotes:  #BFBAB6;
+  --tw-prose-code:    #F7F5F3;
+  --tw-prose-hr:      #2E2E30;
+  --tw-prose-th-borders: #2E2E30;
+  --tw-prose-td-borders: #2E2E30;
+}
+.prose h2, .prose h3 {
+  font-family: 'CabinetGrotesk', system-ui, sans-serif;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
