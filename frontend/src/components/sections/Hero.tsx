@@ -4,7 +4,6 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
-import { sub } from "framer-motion/client";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);

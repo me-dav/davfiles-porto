@@ -28,7 +28,7 @@ export default function ToolboxLoop() {
       repeat: -1,
       // Seamless: on each repeat, snap back to 0 instantly
       modifiers: {
-        x: gsap.utils.unitize((x: number) => parseFloat(x) % totalWidth),
+        x: gsap.utils.unitize((x: number) => x % totalWidth),
       },
     })
 

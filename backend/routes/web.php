@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\Dashboard\AuthController;
-use App\Http\Controllers\Dashboard\ProjectController;
-use App\Http\Controllers\Dashboard\JournalController;
-use App\Http\Controllers\Dashboard\UploadController;
+use App\Http\Controllers\dashboard\AuthController;
+use App\Http\Controllers\dashboard\ProjectController;
+use App\Http\Controllers\dashboard\JournalController;
+use App\Http\Controllers\dashboard\UploadController;
 use Illuminate\Support\Facades\Route;
 
 /*

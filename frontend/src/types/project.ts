@@ -8,8 +8,8 @@ export interface Project {
   stack: string[]
   year: number
   preview_image_url: string
-  live_url?: string | null
-  github_url?: string | null
+  live_url?: string 
+  github_url?: string
   body?: string
   featured: boolean
   created_at?: string
