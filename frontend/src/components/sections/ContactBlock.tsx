@@ -21,10 +21,10 @@ const SOCIALS = [
   { label: "GitHub", href: "https://github.com/me-dav" },
   {
     label: "LinkedIn",
-    href: "https://linkedin.com/in/mohammad-david-nur-syahfrudin",
+    href: "https://linkedin.com/in/mohammad-david-nur-syahfrudin-87ab3b321",
   },
   { label: "Instagram", href: "https://instagram.com/davv_id._" },
-  { label: "TikTok", href: "https://tiktok.com/@davv_id._" },
+  { label: "TikTok", href: "https://tiktok.com/@iam.davv" },
 ];
 
 export default function ContactBlock() {

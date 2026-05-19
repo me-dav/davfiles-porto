@@ -49,17 +49,24 @@ export default function AboutBlock() {
             </h2>
 
             <div className="about-animate max-w-xl space-y-4">
-              <p className="font-body text-base text-ash leading-relaxed">
-                I'm Mohammad David — a full-stack developer and IoT engineer
-                based in Malang, Indonesia. I build systems that sit at the
-                intersection of clean code and considered design.
+              <p className="font-body text-base text-ash leading-relaxed text-justify">
+                I’m Mohammad David — a technology enthusiast focused on web
+                development and IoT systems, based in Malang, Indonesia. I build
+                digital products that prioritize clarity, performance, and
+                real-world usability.
               </p>
 
-              <p className="font-body text-base text-ash leading-relaxed">
-                My work spans web platforms, embedded systems, and the editorial
-                layer that makes both legible to the people using them. I care
-                about the gap between how things are built and how they feel to
-                use.
+              <p className="font-body text-base text-ash leading-relaxed text-justify">
+                My work lives across frontend interfaces, backend logic, and
+                connected devices — from responsive web apps to experimental IoT
+                projects. I’m currently exploring modern web stacks like React
+                and Next.js, while strengthening my fundamentals in system
+                design and scalable architecture.
+              </p>
+              <p className="font-body text-base text-ash leading-relaxed text-justify">
+                What drives me is not just building things that work, but
+                building things that make sense — for users, for developers, and
+                for the systems behind them.
               </p>
             </div>
 
@@ -75,7 +82,7 @@ export default function AboutBlock() {
                 href={process.env.NEXT_PUBLIC_CV_URL ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                download
+                download = "Mohammad-David-resume.pdf"
                 className="underline-offset-4 font-body text-xs uppercase tracking-wide2 text-sand hover:text-ash transition-colors duration-300 flex items-center gap-2"
               >
                 Download CV <span aria-hidden="true">↓</span>
@@ -85,13 +92,13 @@ export default function AboutBlock() {
 
           <div className="relative h-60 md:h-[450px] w-full md:w-[600px] overflow-hidden ">
             <Image
-              src="/images/hero-bg.jpg"
+              src="/images/bg-mt.jpeg"
               alt=""
               fill
               priority
               sizes="(max-width: 768px) 100vw, 400px"
               className="object-cover"
-              style={{ filter: "brightness(0.3) saturate(0.7)" }}
+              style={{ filter: "brightness(0.6) saturate(0.8)" }}
             />
           </div>
         </div>

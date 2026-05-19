@@ -1,16 +1,16 @@
 // src/app/about/page.tsx
-import type { Metadata } from 'next'
-import Layout from '@/components/layout/Layout'
-import ContactBlock from '@/components/sections/ContactBlock'
+import type { Metadata } from "next";
+import Layout from "@/components/layout/Layout";
+import ContactBlock from "@/components/sections/ContactBlock";
 
 export const metadata: Metadata = {
-  title: 'About',
+  title: "About",
   description:
-    'Mohammad David Nur Syahfrudin — Full-Stack Developer, IoT Engineer, Editorial Designer.',
-}
+    "Mohammad David Nur Syahfrudin — Full-Stack Developer, IoT Engineer, Editorial Designer.",
+};
 
 export default function AboutPage() {
-  const cvUrl = process.env.NEXT_PUBLIC_CV_URL ?? '#'
+  const cvUrl = process.env.NEXT_PUBLIC_CV_URL ?? "#";
 
   return (
     <Layout>
@@ -20,35 +20,40 @@ export default function AboutPage() {
           Profile
         </p>
         <h1 className="font-display font-black text-display-lg uppercase text-sand leading-none mb-12">
-          Mohammad<br /><span className='text-ash'>David Nur</span><br />
+          Mohammad
+          <br />
+          <span className="text-ash">David Nur</span>
+          <br />
           <span className="text-stone">Syahfrudin</span>
         </h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl">
           <div className="space-y-5">
-            <p className="font-body text-base text-ash leading-relaxed">
-              Full-Stack Developer and IoT Engineer based in Malang, Indonesia.
-              I design and build systems that sit at the intersection of clean
-              engineering and considered visual craft.
+            <p className="font-body text-base text-ash leading-relaxed text-justify">
+              Full-Stack Developer and IoT enthusiast based in Malang,
+              Indonesia. I build systems that sit at the intersection of clean
+              engineering and thoughtful user experience.
             </p>
-            <p className="font-body text-base text-ash leading-relaxed">
-              My practice spans web platforms (Next.js, Laravel), embedded IoT
-              systems, and the editorial layer that makes both readable to the
-              people actually using them.
+            <p className="font-body text-base text-ash leading-relaxed text-justify">
+              My work spans web development (Next.js, Laravel), foundational
+              backend systems, and early explorations in embedded IoT. I’m
+              focused on strengthening my fundamentals while building real
+              projects that connect code with practical use.
             </p>
-            <p className="font-body text-base text-ash leading-relaxed">
+            <p className="font-body text-base text-ash leading-relaxed text-justify">
               I care about the gap between how things are built and how they
-              feel. Good tools disappear; they let people focus on the work.
+              feel to use. Good tools don’t try to be noticed — they just work
+              and get out of the way.
             </p>
           </div>
 
           {/* Quick facts */}
           <div className="space-y-6">
             {[
-              { label: 'Location',   value: 'Malang, East Java, Indonesia' },
-              { label: 'Focus',      value: 'Web · IoT · Dev-Ops' },
-              { label: 'Stack',      value: 'Next.js · Laravel · Python · C++' },
-              { label: 'Available',  value: 'Open for freelance & Work' },
+              { label: "Location", value: "Malang, East Java, Indonesia" },
+              { label: "Focus", value: "Web · IoT · Dev-Ops" },
+              { label: "Stack", value: "Next.js · Laravel · Python · C++" },
+              { label: "Available", value: "Open for freelance & Work" },
             ].map(({ label, value }) => (
               <div key={label} className="border-b border-slate pb-4">
                 <p className="font-body text-[10px] uppercase tracking-wide2 text-stone mb-1">
@@ -59,12 +64,12 @@ export default function AboutPage() {
             ))}
 
             {/* CV download */}
-            {cvUrl !== '#' ? (
+            {cvUrl !== "#" ? (
               <a
                 href={cvUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                download
+                download = "mohammad-David-Resume.pdf"
                 className="inline-flex items-center gap-3 font-body text-xs uppercase tracking-wide2 text-sand border border-stone/60 px-8 py-3 hover:bg-stone/15 transition-all"
               >
                 Download CV <span aria-hidden="true">↓</span>
@@ -86,28 +91,38 @@ export default function AboutPage() {
         <div className="space-y-10 max-w-2xl">
           {[
             {
-              role:     'Full-Stack Developer',
-              company:  'Freelance',
-              period:   '2023 — Present',
-              summary:  'Designed and built web platforms, IoT dashboards, and editorial tools for clients across Indonesia.',
+              role: "Full-Stack Developer",
+              company: "Personal Projects",
+              period: "2026",
+              summary:
+                "Designed and built web platforms, IoT dashboards, and editorial tools for clients across Indonesia.",
             },
             {
-              role:     'IoT Engineer',
-              company:  'Personal Projects',
-              period:   '2022 — Present',
-              summary:  'Developed MQTT-based real-time control systems, embedded firmware in C++, and data pipelines in Python.',
+              role: "IoT Engineer",
+              company: "Personal Projects",
+              period: "2026",
+              summary:
+                "Developed MQTT-based real-time control systems, embedded firmware in C++, and data pipelines in Python.",
             },
           ].map(({ role, company, period, summary }) => (
             <div key={role} className="border-l border-slate pl-8 relative">
               <div className="absolute -left-[3px] top-1 w-[5px] h-[5px] rounded-full bg-stone" />
-              <p className="font-body text-[10px] uppercase tracking-wide2 text-stone mb-1">{period}</p>
-              <h3 className="font-display font-black text-xl uppercase text-sand">{role}</h3>
-              <p className="font-body text-xs uppercase tracking-editorial text-stone mb-3">{company}</p>
-              <p className="font-body text-sm text-ash leading-relaxed">{summary}</p>
+              <p className="font-body text-[10px] uppercase tracking-wide2 text-stone mb-1">
+                {period}
+              </p>
+              <h3 className="font-display font-black text-xl uppercase text-sand">
+                {role}
+              </h3>
+              <p className="font-body text-xs uppercase tracking-editorial text-stone mb-3">
+                {company}
+              </p>
+              <p className="font-body text-sm text-ash leading-relaxed">
+                {summary}
+              </p>
             </div>
           ))}
         </div>
       </section>
     </Layout>
-  )
+  );
 }
