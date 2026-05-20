@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import { gsap } from "@/lib/gsap";
 
 const NAV_ITEMS = [
+  { label: "Home", href: "/" },
   { label: "Work", href: "/work" },
   { label: "Journal", href: "/journal" },
   { label: "About", href: "/about" },

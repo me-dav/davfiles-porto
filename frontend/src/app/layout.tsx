@@ -4,8 +4,8 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Mohammad David Nur Syahfrudin',
-    template: '%s — David',
+    default: 'DavFiles',
+    template: '%s — DavFiles',
   },
   description:
     'Full-Stack Developer, IoT Engineer, Editorial Designer based in Malang, Indonesia.',
