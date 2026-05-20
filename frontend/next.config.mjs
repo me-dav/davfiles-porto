@@ -9,9 +9,8 @@ const nextConfig = {
         pathname: '/storage/**',
       },
       {
-        protocol: 'http',
-        hostname: '127.0.0.1', // Kadang Laravel kebaca sebagai IP loopback
-        port: '8000',
+        protocol: 'https',
+        hostname: 'api.davfiles.my.id', // Kadang Laravel kebaca sebagai IP loopback
         pathname: '/storage/**',
       },
       {
