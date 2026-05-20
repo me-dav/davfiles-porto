@@ -33,7 +33,7 @@ export default api
 
 // ─── Typed fetchers (used in server components / ISR) ────────────────────────
 
-const BASE = (process.env.NEXT_PUBLIC_API_URL ?? 'https:davfiles.my.id') + '/api/v1'
+const BASE = (process.env.NEXT_PUBLIC_API_URL ?? 'https://api.davfiles.my.id') + '/api/v1'
 
 
 async function apiFetch<T>(path: string): Promise<T> {
