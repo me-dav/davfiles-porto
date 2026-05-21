@@ -14,12 +14,14 @@ interface ProjectsGridProps {
   variant?: 'featured' | 'grid'
   /** Show "View all work" link below */
   showViewAll?: boolean
+  limitmobile?: boolean
 }
 
 export default function ProjectsGrid({
   projects,
   variant = 'grid',
   showViewAll = false,
+  limitmobile = false,
 }: ProjectsGridProps) {
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -77,7 +79,7 @@ export default function ProjectsGrid({
           return (
             <div
               key={project.id}
-              className={`project-card-wrap ${isBig ? 'md:col-span-2' : ''} ${i >= 3 ? 'hidden md:block' : ''}`}
+              className={`project-card-wrap ${isBig ? 'md:col-span-2' : ''} ${limitmobile && i >= 3 ? 'hidden md:block' : ''}`}
             >
               <ProjectCard
                 project={project}

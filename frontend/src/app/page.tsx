@@ -48,6 +48,7 @@ export default async function HomePage() {
         projects={projects}
         variant="featured"
         showViewAll
+        limitmobile = {true}
       />
 
       {/* 03 About */}
