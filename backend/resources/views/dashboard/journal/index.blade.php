@@ -2,6 +2,9 @@
 @section('title', 'Journal')
 
 @section('content')
+<button class="hamburger-btn" onclick="toggleSidebar()">
+  ☰
+</button>
 
 <div class="page-header">
   <div>
@@ -22,9 +25,7 @@
       <thead>
         <tr>
           <th style="width:38%">Title</th>
-          <th style="width:15%">Type</th>
           <th style="width:12%">Status</th>
-          <th style="width:15%">Published</th>
           <th style="width:20%">Actions</th>
         </tr>
       </thead>
@@ -36,17 +37,9 @@
               <div class="td-mono">/{{ $entry->slug }}</div>
             </td>
             <td>
-              <span style="font-size:11px; color:var(--stone); text-transform:uppercase; letter-spacing:.05em">
-                {{ $entry->type }}
-              </span>
-            </td>
-            <td>
               <span class="badge-status {{ $entry->status === 'published' ? 'badge-published' : 'badge-draft' }}">
                 {{ $entry->status }}
               </span>
-            </td>
-            <td style="font-size:11px; color:var(--stone)">
-              {{ $entry->published_at ? $entry->published_at->format('d M Y') : '—' }}
             </td>
             <td>
               <div style="display:flex; gap:.75rem; align-items:center; flex-wrap:wrap">

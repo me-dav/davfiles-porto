@@ -77,7 +77,7 @@ export default function ProjectsGrid({
           return (
             <div
               key={project.id}
-              className={`project-card-wrap ${isBig ? 'md:col-span-2' : ''}`}
+              className={`project-card-wrap ${isBig ? 'md:col-span-2' : ''} ${i >= 3 ? 'hidden md:block' : ''}`}
             >
               <ProjectCard
                 project={project}

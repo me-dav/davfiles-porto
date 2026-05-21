@@ -64,7 +64,7 @@ export default async function JournalEntryPage({ params }: Props) {
         <div className="relative z-10 max-w-3xl">
           <Link
             href="/journal"
-            className="font-body text-[10px] uppercase tracking-wide2 text-sand hover:text-stone transition-colors inline-flex items-center gap-2"
+            className="font-body text-[10px] uppercase tracking-wide2 text-sand hover:text-stone transition-colors inline-flex items-center gap-2 mt-2"
           >
             ← Journal
           </Link>
@@ -93,10 +93,10 @@ export default async function JournalEntryPage({ params }: Props) {
       </section>
 
       {/* ── Body ── */}
-      <section className="px-8 md:px-16 py-20 max-w-3xl">
+      <section className="px-8 md:px-16 py-20 max-w-4xl">
         {entry.body ? (
           <div
-            className="prose prose-invert max-w-none"
+            className="prose prose-invert max-w-none text-justify"
             dangerouslySetInnerHTML={{ __html: entry.body }}
           />
         ) : (

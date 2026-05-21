@@ -111,14 +111,14 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {/* ── Body / Case Study ── */}
-      <section className="px-8 md:px-16 py-20 max-w-3xl">
-        <p className="font-body text-base text-ash leading-relaxed mb-8">
+      <section className="px-8 md:px-16 py-20 max-w-4xl">
+        <p className="font-body text-base text-ash leading-relaxed mb-8 text-justify">
           {project.short_description}
         </p>
 
         {project.body ? (
           <div
-            className="prose prose-invert max-w-none"
+            className="prose prose-invert max-w-none text-justify"
             dangerouslySetInnerHTML={{ __html: project.body }}
           />
         ) : (

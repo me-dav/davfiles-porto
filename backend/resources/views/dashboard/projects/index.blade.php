@@ -3,6 +3,10 @@
 
 @section('content')
 
+<button class="hamburger-btn" onclick="toggleSidebar()">
+  ☰
+</button>
+
 <div class="page-header">
   <div>
     <h1 class="page-title">Projects</h1>
@@ -23,7 +27,6 @@
         <tr>
           <th style="width:35%">Name</th>
           <th style="width:12%">Year</th>
-          <th style="width:18%">Stack</th>
           <th style="width:10%">Featured</th>
           <th style="width:25%">Actions</th>
         </tr>
@@ -36,14 +39,7 @@
               <div class="td-mono">/{{ $project->slug }}</div>
             </td>
             <td>{{ $project->year }}</td>
-            <td>
-              <div style="font-size:11px; color:var(--stone)">
-                {{ collect($project->stack)->take(3)->implode(', ') }}
-                @if(count($project->stack ?? []) > 3)
-                  <span style="opacity:.5">+{{ count($project->stack) - 3 }}</span>
-                @endif
-              </div>
-            </td>
+            
             <td>
               @if ($project->featured)
                 <span class="badge-status badge-featured">Yes</span>

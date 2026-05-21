@@ -16,7 +16,7 @@ export const revalidate = 60
 
 async function getFeaturedProjects() {
   try {
-    const data = await apiFetch<ProjectsResponse>('/projects/featured?limit=3')
+    const data = await apiFetch<ProjectsResponse>('/projects/featured?limit=5')
     return data.projects
   } catch {
     return []
