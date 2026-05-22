@@ -31,7 +31,6 @@ export default function JournalItem({ entry }: JournalItemProps) {
       aria-label={entry.title}
     >
       {/* Image — visual types only */}
-      {isVisual && (
         <div className="relative overflow-hidden mb-4" style={{ height: '200px' }}>
           {entry.hero_image_url ? (
             <Image
@@ -46,7 +45,6 @@ export default function JournalItem({ entry }: JournalItemProps) {
             <div className="absolute inset-0 bg-graphite" />
           )}
         </div>
-      )}
 
       {/* Text block */}
       <div className={isVisual ? '' : 'border-t border-slate pt-5'}>
