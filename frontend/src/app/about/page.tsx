@@ -10,7 +10,8 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  const cvUrl = process.env.NEXT_PUBLIC_CV_URL ?? "#";
+  const cvInUrl = process.env.NEXT_PUBLIC_CV_In_URL ?? "#";
+  const cvEnUrl = process.env.NEXT_PUBLIC_CV_En_URL ?? "#";
 
   return (
     <Layout>
@@ -64,21 +65,25 @@ export default function AboutPage() {
             ))}
 
             {/* CV download */}
-            {cvUrl !== "#" ? (
               <a
-                href={cvUrl}
+                href={cvInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 download = "mohammad-David-Resume.pdf"
-                className="inline-flex items-center gap-3 font-body text-xs uppercase tracking-wide2 text-sand border border-stone/60 px-8 py-3 hover:bg-stone/15 transition-all"
+                className="inline-flex items-center gap-3 font-body text-xs uppercase tracking-wide2 text-sand border border-stone/60 px-4 py-3 hover:bg-stone/15 transition-all"
               >
-                Download CV <span aria-hidden="true">↓</span>
+                CV IND Version <span aria-hidden="true">↓</span>
               </a>
-            ) : (
-              <p className="font-body text-xs text-stone/50 italic">
-                CV coming soon — set NEXT_PUBLIC_CV_URL in .env.local
-              </p>
-            )}
+              <a
+                href={cvEnUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                download = "mohammad-David-Resume.pdf"
+                className="inline-flex items-center gap-3 font-body text-xs uppercase tracking-wide2 text-sand border border-stone/60 px-4 py-3 hover:bg-stone/15 transition-all"
+              >
+                CV English Version <span aria-hidden="true">↓</span>
+              </a>
+
           </div>
         </div>
       </section>
