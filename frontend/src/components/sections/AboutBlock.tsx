@@ -79,16 +79,16 @@ export default function AboutBlock() {
               </Link>
 
               <a
-                href={process.env.NEXT_PUBLIC_CV_In_URL ?? "#"}
+                href="/files/MohammadDavid-resume-In.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
-                download = "Mohammad-David-resume.pdf"
+                download = "MohammadDavid-resume-In.pdf"
                 className="p-2 underline-offset-4 font-body text-xs uppercase tracking-wide2 text-sand hover:text-ash transition-colors duration-300 flex items-center gap-2"
               >
                 CV IND Version <span aria-hidden="true">↓</span>
               </a>
               <a
-                href={process.env.NEXT_PUBLIC_CV_En_URL ?? "#"}
+                href="/files/MohammadDavid-resume-En.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 download = "Mohammad-David-resume.pdf"

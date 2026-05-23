@@ -86,11 +86,12 @@ export default function ContactBlock() {
         </div>
         <div className="contact-animate flex flex-col gap-3">
           <a
-            href="mailto:000david12345go@gmail.com"
+            href="https://mail.google.com/mail/u/0/#inbox?compose=DmwnWtVbDkxgRcdJFbdwhFjkXMmQkqcbgxWQbCGdGsRtkVTZJlZhgLPvkVssGGJKPhmvktFPTwfQ"
+            target="_blank"
             className="font-body text-sm text-ash hover:text-sand transition-colors group flex items-center gap-2 no-underline"
           >
             <span className="text-stone text-xs">→</span>
-            000david12345go@gmail.com
+            davidmohammadns@gmail.com
           </a>
           {SOCIALS.map((s) => (
             <a

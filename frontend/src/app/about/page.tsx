@@ -10,8 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
-  const cvInUrl = process.env.NEXT_PUBLIC_CV_In_URL ?? "#";
-  const cvEnUrl = process.env.NEXT_PUBLIC_CV_En_URL ?? "#";
 
   return (
     <Layout>
@@ -66,7 +64,7 @@ export default function AboutPage() {
 
             {/* CV download */}
               <a
-                href={cvInUrl}
+                href="/files/MohammadDavid-resume-In.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 download = "mohammad-David-Resume.pdf"
@@ -75,7 +73,7 @@ export default function AboutPage() {
                 CV IND Version <span aria-hidden="true">↓</span>
               </a>
               <a
-                href={cvEnUrl}
+                href="/files/MohammadDavid-resume-En.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
                 download = "mohammad-David-Resume.pdf"
