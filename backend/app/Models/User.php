@@ -11,20 +11,32 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-        'role',
-    ];
+    // JANGAN masukkan role/status/modules ke $fillable.
+// Kalau masuk, orang bisa mendaftar sambil mengirim role=super_admin.
+    protected $fillable = ['name', 'email', 'password'];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'approved_at' => 'datetime',
+            'password' => 'hashed',
+            'modules' => 'array',
+        ];
+    }
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password'          => 'hashed',
-    ];
+    public function hasModule(string $module): bool
+    {
+        return $this->role === 'super_admin' || in_array($module, $this->modules ?? [], true);
+    }
+
+    public function isActive(): bool
+    {
+        return $this->status === 'active';
+    }
+
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
 }

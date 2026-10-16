@@ -1,44 +1,32 @@
 <?php
 
-use App\Http\Controllers\dashboard\AuthController;
-use App\Http\Controllers\dashboard\ProjectController;
-use App\Http\Controllers\dashboard\JournalController;
-use App\Http\Controllers\dashboard\UploadController;
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes — Dashboard (Blade + Session Auth)
-|--------------------------------------------------------------------------
-| Semua route dashboard dilindungi session auth Laravel.
-| Akses: http://localhost:8000/dashboard
-*/
+Route::view('/', 'welcome');
 
-// ── Auth ──────────────────────────────────────────────────────────────────
-Route::middleware('guest')->group(function () {
-    Route::get('/login',  [AuthController::class, 'showLogin'])->name('login');
-    Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::view('dashboard', 'dashboard')
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
+
+Route::view('profile', 'profile')
+    ->middleware(['auth'])
+    ->name('profile');
+
+Route::redirect('/', '/dashboard');
+
+Route::middleware('auth')->get('/pending', fn() => view('pending'))->name('pending');
+
+Route::middleware(['auth', 'active'])->group(function () {
+    Route::view('/dashboard', 'dashboard')->name('dashboard');
+    Route::view('/profile', 'profile')->name('profile');
+
+    Route::middleware('module:finance')->prefix('finance')->name('finance.')->group(function () {
+        // Step berikutnya: accounts, transactions, categories
+    });
+
+    Route::middleware('can:manage-content')->group(function () {
+        // users, projects, journal
+    });
 });
 
-Route::post('/logout', [AuthController::class, 'logout'])
-    ->name('logout')
-    ->middleware('auth');
-
-// ── Dashboard (semua protected session auth) ──────────────────────────────
-Route::prefix('/')
-    ->middleware('auth')
-    ->name('dashboard.')
-    ->group(function () {
-
-    // Home → redirect ke projects
-    Route::get('/', fn() => redirect()->route('dashboard.projects.index'));
-
-    // Projects CRUD
-    Route::resource('projects', ProjectController::class);
-
-    // Journal CRUD
-    Route::resource('journal', JournalController::class);
-
-    // Upload (image upload dari form)
-    Route::post('/upload', [UploadController::class, 'store'])->name('upload');
-});
+require __DIR__ . '/auth.php';
