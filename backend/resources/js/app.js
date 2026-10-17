@@ -1,1 +1,1 @@
-//
+import './finance-charts';
