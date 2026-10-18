@@ -34,7 +34,14 @@
             @can('manage-content')
                 <div>
                     <p class="px-3 pb-2 text-xs font-medium uppercase tracking-wide text-gray-400">Admin</p>
-                    {{-- Users, Projects, Journal ditambah nanti --}}
+                    @php $pending = \App\Models\User::where('status', 'pending')->count(); @endphp
+                    <x-erp.nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
+                        Users
+                        @if($pending > 0)
+                            <span
+                                class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{{ $pending }}</span>
+                        @endif
+                    </x-erp.nav-link>
                 </div>
             @endcan
         </nav>
