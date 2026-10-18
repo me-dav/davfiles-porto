@@ -15,7 +15,11 @@ class EnsureModule
      */
     public function handle(Request $request, Closure $next, string $module): Response
     {
-        abort_unless($request->user()?->hasModule($module), 403);
+        if (!$request->user()?->hasModule($module)) {
+            return $request->is('api/*')
+                ? response()->json(['success' => false, 'error' => 'Module not available', 'statusCode' => 403], 403)
+                : abort(403);
+        }
         return $next($request);
     }
 }

@@ -26,6 +26,13 @@
             <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
         </div>
 
+        <div>
+            <input type="date" wire:model="date" max="{{ today()->toDateString() }}"
+                class="w-full rounded-lg border-gray-300 text-sm lg:w-40">
+            @error('date')
+            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+        </div>
+
         <input wire:model="note" placeholder="Catatan singkat…"
             class="w-full flex-1 rounded-lg border-gray-300 text-sm">
 

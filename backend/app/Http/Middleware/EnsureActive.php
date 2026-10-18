@@ -18,7 +18,15 @@ class EnsureActive
         $user = $request->user();
 
         if ($user && !$user->isActive()) {
-            if ($user->status === 'pending') {
+            if ($request->expectsJson() || $request->is('api/*')) {
+                return response()->json([
+                    'success' => false,
+                    'error' => 'Account is not active',
+                    'statusCode' => 403,
+                ], 403);
+            }
+
+            else if ($user->status === 'pending') {
                 return redirect()->route('pending');
             }
             auth()->logout();

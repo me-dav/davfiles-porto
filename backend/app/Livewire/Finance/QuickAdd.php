@@ -14,10 +14,16 @@ class QuickAdd extends Component
     public ?int $categoryId = null;
     public string $amount = '';
     public string $note = '';
+    public string $date = '';
 
     public function updatedType(): void
     {
         $this->categoryId = null;     // kategori tergantung tipe
+    }
+
+    public function mount(): void
+    {
+        $this->date = today()->toDateString();
     }
 
     public function save(AddTransaction $action): void
@@ -27,7 +33,8 @@ class QuickAdd extends Component
             'amount' => 'required|string|max:20',
             'categoryId' => 'required|integer',
             'note' => 'nullable|string|max:255',
-        ], [], ['categoryId' => 'kategori', 'amount' => 'nominal']);
+            'date' => 'required|date|before_or_equal:today',
+        ], [], ['categoryId' => 'kategori', 'amount' => 'nominal','date' => 'tanggal']);
 
         try {
             $amount = MoneyParser::toInt($this->amount);
@@ -41,9 +48,11 @@ class QuickAdd extends Component
             'amount' => $amount,
             'category_id' => $this->categoryId,
             'note' => $this->note ?: null,
+            'transacted_at' => $this->date,
             'source' => 'web',
         ]);
 
+        
         $this->reset('amount', 'note');
         $this->dispatch('transaction-added');
     }

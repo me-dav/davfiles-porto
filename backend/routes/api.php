@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\ToolboxController;
 use App\Http\Controllers\Api\UploadController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\V1\FinanceApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,12 +32,12 @@ Route::prefix('v1')->group(function () {
     // NOTE: 'featured' must be registered BEFORE '{slug}' to avoid
     //       Laravel matching "featured" as a slug parameter.
     Route::get('projects/featured', [ProjectController::class, 'featured']);
-    Route::get('projects',          [ProjectController::class, 'index']);
-    Route::get('projects/{slug}',   [ProjectController::class, 'show']);
+    Route::get('projects', [ProjectController::class, 'index']);
+    Route::get('projects/{slug}', [ProjectController::class, 'show']);
 
     // ── Journal (public) ──────────────────────────────────────────────────
-    Route::get('journal',         [JournalController::class, 'index']);
-    Route::get('journal/{slug}',  [JournalController::class, 'show']);
+    Route::get('journal', [JournalController::class, 'index']);
+    Route::get('journal/{slug}', [JournalController::class, 'show']);
 
     // ── Toolbox (public) ──────────────────────────────────────────────────
     Route::get('toolbox', [ToolboxController::class, 'index']);
@@ -44,23 +45,34 @@ Route::prefix('v1')->group(function () {
     // ── Contact (public, rate-limited) ────────────────────────────────────
     // throttle:5,1 = max 5 requests per 1 minute per IP
     Route::post('contact', [ContactController::class, 'store'])
-         ->middleware('throttle:5,1');
+        ->middleware('throttle:5,1');
 
     // ── Admin (all protected by Sanctum) ──────────────────────────────────
     Route::prefix('admin')->middleware('auth:sanctum')->group(function () {
 
         // Projects CRUD
-        Route::post('projects',        [ProjectController::class, 'store']);
-        Route::put('projects/{id}',    [ProjectController::class, 'update']);
+        Route::post('projects', [ProjectController::class, 'store']);
+        Route::put('projects/{id}', [ProjectController::class, 'update']);
         Route::delete('projects/{id}', [ProjectController::class, 'destroy']);
 
         // Journal CRUD
-        Route::get('journal',          [JournalController::class, 'adminIndex']); // includes drafts
-        Route::post('journal',         [JournalController::class, 'store']);
-        Route::put('journal/{id}',     [JournalController::class, 'update']);
-        Route::delete('journal/{id}',  [JournalController::class, 'destroy']);
+        Route::get('journal', [JournalController::class, 'adminIndex']); // includes drafts
+        Route::post('journal', [JournalController::class, 'store']);
+        Route::put('journal/{id}', [JournalController::class, 'update']);
+        Route::delete('journal/{id}', [JournalController::class, 'destroy']);
 
         // File upload
         Route::post('uploads', [UploadController::class, 'store']);
     });
 });
+
+Route::prefix('v1/finance')
+    ->middleware(['auth:sanctum', 'active', 'module:finance', 'throttle:60,1'])
+    ->group(function () {
+        Route::get('categories', [FinanceApiController::class, 'categories']);
+        Route::get('accounts', [FinanceApiController::class, 'accounts']);
+        Route::get('summary', [FinanceApiController::class, 'summary'])->middleware('ability:finance:read');
+        Route::get('transactions', [FinanceApiController::class, 'index'])->middleware('ability:finance:read');
+        Route::post('transactions', [FinanceApiController::class, 'store'])->middleware('ability:finance:write');
+        Route::delete('transactions/{id}', [FinanceApiController::class, 'destroy'])->middleware('ability:finance:write');
+    });

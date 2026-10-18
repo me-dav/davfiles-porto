@@ -23,6 +23,7 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('module:finance')->prefix('finance')->name('finance.')->group(function () {
         // routes/web.php, di dalam grup module:finance
         Route::view('/transactions', 'finance.transactions')->name('transactions');
+        Route::view('/settings/api-keys', 'settings.api-keys')->name('settings.api-keys');
     });
 
     Route::middleware('can:manage-content')->group(function () {
