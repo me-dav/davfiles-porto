@@ -18,6 +18,7 @@ class FinanceApiController extends Controller
     {
         return [
             'id' => $t->id,
+            'account' => $t->account?->name,
             'type' => $t->type,
             'amount' => $t->amount,
             'category' => $t->category?->name,
@@ -49,7 +50,7 @@ class FinanceApiController extends Controller
             'limit' => 'nullable|integer|min:1|max:100',
         ]);
 
-        $q = Transaction::with('category')
+        $q = Transaction::with(['category', 'account'])
             ->when($r->from, fn($q, $v) => $q->whereDate('transacted_at', '>=', $v))
             ->when($r->to, fn($q, $v) => $q->whereDate('transacted_at', '<=', $v))
             ->when($r->type, fn($q, $v) => $q->where('type', $v))
@@ -69,10 +70,11 @@ class FinanceApiController extends Controller
             'category' => 'required|string|max:60',
             'note' => 'nullable|string|max:255',
             'date' => 'nullable|date',
+            'account' => 'nullable|string|max:60',
         ]);
 
         $key = $r->header('Idempotency-Key');
-        if ($key && ($dup = Transaction::with('category')->where('idempotency_key', $key)->first())) {
+        if ($key && ($dup = Transaction::with(['category', 'account'])->where('idempotency_key', $key)->first())) {
             return $this->ok(['transaction' => $this->tx($dup)], 'Duplicate ignored');
         }
 
@@ -88,7 +90,19 @@ class FinanceApiController extends Controller
             return $this->fail("Category not found: {$r->category}. Available: {$list}", 422);
         }
 
+        $accountId = null;
+        if ($r->filled('account')) {
+            $acc = Account::where('is_active', true)
+                ->whereRaw('LOWER(name) = ?', [mb_strtolower(trim($r->account))])->first();
+            if (!$acc) {
+                $list = Account::where('is_active', true)->pluck('name')->join(', ');
+                return $this->fail("Account not found: {$r->account}. Available: {$list}", 422);
+            }
+            $accountId = $acc->id;
+        }
+
         $tx = $action->handle([
+            'account_id' => $accountId,
             'type' => $r->type,
             'amount' => $amount,
             'category_id' => $cat->id,
@@ -96,7 +110,7 @@ class FinanceApiController extends Controller
             'transacted_at' => $r->date ? Carbon::parse($r->date) : today(),
             'source' => 'hermes',
             'idempotency_key' => $key,
-        ])->load('category');
+        ])->load(['category', 'account']);
 
         $now = now();
         return $this->ok([

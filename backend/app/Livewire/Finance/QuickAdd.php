@@ -7,6 +7,7 @@ use App\Actions\Finance\AddTransaction;
 use App\Models\FinanceCategory;
 use App\Support\MoneyParser;
 use Livewire\Component;
+use App\Models\Account;
 
 class QuickAdd extends Component
 {
@@ -15,6 +16,7 @@ class QuickAdd extends Component
     public string $amount = '';
     public string $note = '';
     public string $date = '';
+    public ?int $accountId = null;
 
     public function updatedType(): void
     {
@@ -24,7 +26,9 @@ class QuickAdd extends Component
     public function mount(): void
     {
         $this->date = today()->toDateString();
+        $this->accountId = Account::where('is_default', true)->where('is_active', true)->value('id');
     }
+
 
     public function save(AddTransaction $action): void
     {
@@ -34,7 +38,8 @@ class QuickAdd extends Component
             'categoryId' => 'required|integer',
             'note' => 'nullable|string|max:255',
             'date' => 'required|date|before_or_equal:today',
-        ], [], ['categoryId' => 'kategori', 'amount' => 'nominal','date' => 'tanggal']);
+            'accountId' => 'required|integer',
+        ], [], ['categoryId' => 'kategori', 'amount' => 'nominal', 'date' => 'tanggal']);
 
         try {
             $amount = MoneyParser::toInt($this->amount);
@@ -47,12 +52,13 @@ class QuickAdd extends Component
             'type' => $this->type,
             'amount' => $amount,
             'category_id' => $this->categoryId,
+            'account_id' => $this->accountId,
             'note' => $this->note ?: null,
             'transacted_at' => $this->date,
             'source' => 'web',
         ]);
 
-        
+
         $this->reset('amount', 'note');
         $this->dispatch('transaction-added');
     }
@@ -61,6 +67,7 @@ class QuickAdd extends Component
     {
         return view('livewire.finance.quick-add', [
             'categories' => FinanceCategory::where('kind', $this->type)->orderBy('name')->get(),
+            'accounts' => Account::where('is_active', true)->orderByDesc('is_default')->orderBy('name')->get(),
         ]);
     }
 }

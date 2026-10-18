@@ -27,6 +27,16 @@
         </div>
 
         <div>
+            <select wire:model="accountId" class="w-full rounded-lg border-gray-300 text-sm lg:w-36">
+                @foreach($accounts as $a)
+                    <option value="{{ $a->id }}">{{ $a->name }}</option>
+                @endforeach
+            </select>
+            @error('accountId')
+            <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+        </div>
+
+        <div>
             <input type="date" wire:model="date" max="{{ today()->toDateString() }}"
                 class="w-full rounded-lg border-gray-300 text-sm lg:w-40">
             @error('date')

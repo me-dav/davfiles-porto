@@ -13,7 +13,7 @@ class AddTransaction
         // semua query di bawah otomatis terfilter ke user yang login (global scope)
         $account = isset($d['account_id'])
             ? Account::findOrFail($d['account_id'])
-            : Account::where('is_default', true)->first();
+            : Account::where('is_default', true)->where('is_active', true)->first();
 
         if (!$account) {
             throw ValidationException::withMessages(['account' => 'Belum ada akun default.']);

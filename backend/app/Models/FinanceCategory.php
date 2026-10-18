@@ -9,5 +9,10 @@ class FinanceCategory extends Model
 {
     use BelongsToUser;
     protected $guarded = [];
+
+    public function transactions()
+    {
+        return $this->hasMany(Transaction::class, 'category_id');
+    }
 }
 

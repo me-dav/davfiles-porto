@@ -28,6 +28,10 @@
                     {{-- layouts/erp.blade.php, di bawah judul "Finance" --}}
                     <x-erp.nav-link :href="route('finance.transactions')"
                         :active="request()->routeIs('finance.transactions')">Transaksi</x-erp.nav-link>
+                    <x-erp.nav-link :href="route('finance.accounts')"
+                        :active="request()->routeIs('finance.accounts')">Akun</x-erp.nav-link>
+                    <x-erp.nav-link :href="route('finance.categories')"
+                        :active="request()->routeIs('finance.categories')">Kategori</x-erp.nav-link>
                 </div>
             @endif
 

@@ -24,6 +24,8 @@ Route::middleware(['auth', 'active'])->group(function () {
         // routes/web.php, di dalam grup module:finance
         Route::view('/transactions', 'finance.transactions')->name('transactions');
         Route::view('/settings/api-keys', 'settings.api-keys')->name('settings.api-keys');
+        Route::view('/accounts', 'finance.accounts')->name('accounts');
+        Route::view('/categories', 'finance.categories')->name('categories');
     });
 
     Route::middleware('can:manage-content')->group(function () {
