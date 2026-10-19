@@ -63,8 +63,8 @@ class UserManager extends Component
         $users = User::query()
             ->when($this->status, fn($q, $v) => $q->where('status', $v))
             ->when($this->search, fn($q, $v) => $q->where(fn($w) =>
-                $w->where('name', 'like', "%{$v}%")->orWhere('email', 'like', "%{$v}%")))
-            ->orderByRaw("FIELD(status,'pending','active','suspended')")
+                $w->where('name', 'ilike', "%{$v}%")->orWhere('email', 'ilike', "%{$v}%")))
+            ->orderByRaw("CASE status WHEN 'pending' THEN 1 WHEN 'active' THEN 2 ELSE 3 END")
             ->latest()->paginate(15);
 
         return view('livewire.admin.user-manager', ['users' => $users]);

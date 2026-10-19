@@ -1,34 +1,36 @@
 // src/app/page.tsx
-import Layout from '@/components/layout/Layout'
-import Hero from '@/components/sections/Hero'
-import ProjectsGrid from '@/components/sections/ProjectsGrid'
-import AboutBlock from '@/components/sections/AboutBlock'
-import JournalList from '@/components/sections/JournalList'
-import ToolboxLoop from '@/components/sections/ToolboxLoop'
-import SoftSkills from '@/components/sections/SoftSkills'
-import ContactBlock from '@/components/sections/ContactBlock'
-import { apiFetch } from '@/lib/api'
-import type { ProjectsResponse } from '@/types/project'
-import type { JournalResponse } from '@/types/journal'
+import Layout from "@/components/layout/Layout";
+import Hero from "@/components/sections/Hero";
+import ProjectsGrid from "@/components/sections/ProjectsGrid";
+import AboutBlock from "@/components/sections/AboutBlock";
+import JournalList from "@/components/sections/JournalList";
+import ToolboxLoop from "@/components/sections/ToolboxLoop";
+import SoftSkills from "@/components/sections/SoftSkills";
+import ContactBlock from "@/components/sections/ContactBlock";
+import { apiFetch } from "@/lib/api";
+import type { ProjectsResponse } from "@/types/project";
+import type { JournalResponse } from "@/types/journal";
 
 // ISR — revalidate every 60 seconds
-export const revalidate = 60
+export const revalidate = 60;
 
 async function getFeaturedProjects() {
   try {
-    const data = await apiFetch<ProjectsResponse>('/projects/featured?limit=5')
-    return data.projects
-  } catch {
-    return []
+    const data = await apiFetch<ProjectsResponse>("/projects/featured?limit=5");
+    return data.projects;
+  } catch (e) {
+    console.error("[home] featured projects gagal:", e);
+    return [];
   }
 }
 
 async function getLatestJournal() {
   try {
-    const data = await apiFetch<JournalResponse>('/journal?page=1&per=3')
-    return data.entries
-  } catch {
-    return []
+    const data = await apiFetch<JournalResponse>("/journal?page=1&per=3");
+    return data.entries;
+  } catch (e) {
+    console.error("[home] journal gagal:", e);
+    return [];
   }
 }
 
@@ -36,7 +38,7 @@ export default async function HomePage() {
   const [projects, entries] = await Promise.all([
     getFeaturedProjects(),
     getLatestJournal(),
-  ])
+  ]);
 
   return (
     <Layout heroPage>
@@ -48,7 +50,7 @@ export default async function HomePage() {
         projects={projects}
         variant="featured"
         showViewAll
-        limitmobile = {true}
+        limitmobile={true}
       />
 
       {/* 03 About */}
@@ -62,7 +64,6 @@ export default async function HomePage() {
 
       {/* 06 Soft Skills */}
       <SoftSkills />
-
     </Layout>
-  )
+  );
 }

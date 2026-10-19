@@ -55,8 +55,9 @@ class SummaryService
 
         $rows = Transaction::query()
             ->whereBetween('transactions.transacted_at', [$from->toDateString(), $to->toDateString()])
-            ->selectRaw('transacted_at as d, type, SUM(amount) as total')
-            ->groupBy('d', 'type')->get();
+            ->selectRaw('transacted_at::date as d, type, SUM(amount) as total')
+            ->groupByRaw('transacted_at::date, type')
+            ->get();
 
         foreach ($rows as $r) {
             $idx = intdiv((int) $from->diffInDays(Carbon::parse($r->d)->startOfDay()), $step);

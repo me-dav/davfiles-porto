@@ -1,31 +1,28 @@
 <?php
 
+// app/Models/Project.php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class Project extends Model
 {
-    use HasFactory;
+    use HasUniqueSlug, SoftDeletes;
 
-    protected $fillable = [
-        'name',
-        'slug',
-        'short_description',
-        'role',
-        'stack',
-        'year',
-        'preview_image_url',
-        'live_url',
-        'github_url',
-        'body',
-        'featured',
-    ];
+    protected $guarded = [];
+    protected $casts = ['stack' => 'array', 'featured' => 'boolean', 'year' => 'integer'];
 
-    protected $casts = [
-        'stack'    => 'array',   // stored as JSON, cast to PHP array automatically
-        'featured' => 'boolean',
-        'year'     => 'integer',
-    ];
+    public function imageUrl(): ?string
+    {
+        return $this->image_path ? Storage::disk('public')->url($this->image_path) : null;
+    }
+
+    public function bodyHtml(): string
+    {
+        return Str::markdown($this->body ?? '', ['html_input' => 'strip', 'allow_unsafe_links' => false]);
+    }
 }

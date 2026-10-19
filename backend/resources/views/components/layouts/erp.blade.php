@@ -46,6 +46,10 @@
                                 class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{{ $pending }}</span>
                         @endif
                     </x-erp.nav-link>
+                    <x-erp.nav-link :href="route('admin.projects')"
+                        :active="request()->routeIs('admin.projects')">Projects</x-erp.nav-link>
+                    <x-erp.nav-link :href="route('admin.journal')"
+                        :active="request()->routeIs('admin.journal')">Journal</x-erp.nav-link>
                 </div>
             @endcan
         </nav>

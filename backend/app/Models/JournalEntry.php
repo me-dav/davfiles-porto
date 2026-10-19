@@ -1,35 +1,33 @@
 <?php
 
+// app/Models/JournalEntry.php
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class JournalEntry extends Model
 {
-    use HasFactory;
+    use HasUniqueSlug, SoftDeletes;
 
-    protected $fillable = [
-        'title',
-        'slug',
-        'type',
-        'hero_image_url',
-        'body',
-        'tags',
-        'status',
-        'published_at',
-    ];
+    protected $guarded = [];
+    protected $casts = ['tags' => 'array', 'published_at' => 'datetime'];
 
-    protected $casts = [
-        'tags'         => 'array',   // JSON → PHP array
-        'published_at' => 'datetime',
-    ];
-
-    /**
-     * Scope: only published entries (used in public API).
-     */
-    public function scopePublished($query)
+    public function scopePublished($q)
     {
-        return $query->where('status', 'published');
+        return $q->where('status', 'published')->where('published_at', '<=', now());
+    }
+
+    public function imageUrl(): ?string
+    {
+        return $this->image_path ? Storage::disk('public')->url($this->image_path) : null;
+    }
+
+    public function bodyHtml(): string
+    {
+        return Str::markdown($this->body ?? '', ['html_input' => 'strip', 'allow_unsafe_links' => false]);
     }
 }

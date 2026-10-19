@@ -108,7 +108,7 @@ class TransactionTable extends Component
         $rows = Transaction::with(['category', 'account'])
             ->when($this->type, fn($q, $v) => $q->where('type', $v))
             ->when($this->category, fn($q, $v) => $q->where('category_id', $v))
-            ->when($this->search, fn($q, $v) => $q->where('note', 'like', "%{$v}%"))
+            ->when($this->search, fn($q, $v) => $q->where('note', 'ilike', "%{$v}%"))
             ->orderByDesc('transacted_at')->orderByDesc('id')
             ->paginate(15);
 

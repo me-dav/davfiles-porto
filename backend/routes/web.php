@@ -31,6 +31,9 @@ Route::middleware(['auth', 'active'])->group(function () {
     Route::middleware('can:manage-content')->group(function () {
         // users, projects, journal
         Route::view('/admin/users', 'admin.users')->name('admin.users');
+        Route::view('/admin/projects', 'admin.projects')->name('admin.projects');
+        Route::view('/admin/journal', 'admin.journal')->name('admin.journal');
+
     });
 });
 
