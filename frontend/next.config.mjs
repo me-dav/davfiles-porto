@@ -15,6 +15,12 @@ const nextConfig = {
         pathname: '/storage/**',
       },
       {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8000',
+        pathname: '/storage/**',
+      },
+      {
         protocol: 'https',
         hostname: 'images.unsplash.com', // Masukkan kembali yang Unsplash tadi di sini
         pathname: '**',

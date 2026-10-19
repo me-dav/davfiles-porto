@@ -16,14 +16,21 @@ class JournalController extends Controller
     public function index(Request $r)
     {
         $r->validate([
-            'type' => 'nullable|in:exploration,server,hiking,ui_thoughts,learning_log',
+            'type' => 'nullable|in:exploration,server,server-notes,hiking,ui_thoughts,ui-thoughts,learning_log,learning-log',
             'tag' => 'nullable|string|max:40',
             'q' => 'nullable|string|max:80',
             'per' => 'nullable|integer|min:1|max:50',
         ]);
 
+        $type = match ($r->type) {
+            'server-notes' => 'server',
+            'ui-thoughts' => 'ui_thoughts',
+            'learning-log' => 'learning_log',
+            default => $r->type,
+        };
+
         $p = JournalEntry::published()
-            ->when($r->type, fn($q, $v) => $q->where('type', $v))
+            ->when($type, fn($q, $v) => $q->where('type', $v))
             ->when($r->tag, fn($q, $v) => $q->whereJsonContains('tags', $v))
             ->when($r->q, fn($q, $v) => $q->where('title', 'ilike', '%' . addcslashes($v, '%_') . '%'))
             ->orderByDesc('published_at')

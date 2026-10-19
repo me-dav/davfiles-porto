@@ -26,8 +26,13 @@
                 @forelse($entries as $e)
                     <tr wire:key="je-{{ $e->id }}">
                         <td class="px-4 py-3">
-                            <p class="font-medium">{{ $e->title }}</p>
-                            <p class="text-xs text-gray-500">/{{ $e->slug }}</p>
+                            <div class="flex items-center gap-3">
+                                @if($e->imageUrl())<img src="{{ $e->imageUrl() }}" class="h-10 w-14 rounded object-cover" alt="">@endif
+                                <div>
+                                    <p class="font-medium">{{ $e->title }}</p>
+                                    <p class="text-xs text-gray-500">/{{ $e->slug }}</p>
+                                </div>
+                            </div>
                         </td>
                         <td class="px-4 py-3 text-gray-600">{{ $e->type }}</td>
                         <td class="px-4 py-3">
@@ -98,7 +103,7 @@
                         <div wire:loading wire:target="image" class="text-xs text-gray-500">Mengunggah…</div>
                         @if($image)<img src="{{ $image->temporaryUrl() }}" class="mt-2 h-24 rounded" alt="">
                         @elseif($currentImage)<img
-                            src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($currentImage) }}"
+                            src="{{ str_starts_with($currentImage, 'http://') || str_starts_with($currentImage, 'https://') ? $currentImage : \Illuminate\Support\Facades\Storage::disk('public')->url($currentImage) }}"
                         class="mt-2 h-24 rounded" alt="">@endif
                     </div>
 

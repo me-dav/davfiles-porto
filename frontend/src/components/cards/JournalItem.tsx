@@ -6,9 +6,12 @@ import type { JournalEntry } from '@/types/journal'
 const TYPE_LABELS: Record<string, string> = {
   'exploration':  'Exploration',
   'server-notes': 'Server Notes',
+  'server':       'Server Notes',
   'hiking':       'Hiking',
   'ui-thoughts':  'UI Thoughts',
+  'ui_thoughts':  'UI Thoughts',
   'learning-log': 'Learning Log',
+  'learning_log': 'Learning Log',
 }
 
 interface JournalItemProps {
@@ -16,7 +19,7 @@ interface JournalItemProps {
 }
 
 export default function JournalItem({ entry }: JournalItemProps) {
-  const isVisual = entry.type === 'exploration' || entry.type === 'hiking'
+  const isVisual = Boolean(entry.hero_image_url) || entry.type === 'exploration' || entry.type === 'hiking' || (entry.type as string) === 'ui_thoughts' || (entry.type as string) === 'ui-thoughts'
   const label    = TYPE_LABELS[entry.type] ?? entry.type
 
   const date = entry.published_at
