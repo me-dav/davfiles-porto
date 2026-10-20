@@ -2,7 +2,6 @@
 <x-layouts.erp title="Dashboard">
     @if(auth()->user()->hasModule('finance'))
         <div class="space-y-4">
-            <livewire:finance.quick-add />
             <livewire:finance.dashboard />
         </div>
     @else

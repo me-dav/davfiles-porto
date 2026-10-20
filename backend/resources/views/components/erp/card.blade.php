@@ -1,1 +1,2 @@
-<div {{ $attributes->class('rounded-xl border border-gray-200 bg-white p-5 shadow-sm') }}>{{ $slot }}</div>
+{{-- components/erp/card.blade.php --}}
+<div {{ $attributes->class('rounded-2xl bg-white p-6 shadow-[0_4px_24px_rgba(15,23,42,0.05)]') }}>{{ $slot }}</div>

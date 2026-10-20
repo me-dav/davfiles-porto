@@ -1,6 +1,7 @@
 {{-- resources/views/livewire/finance/transaction-table.blade.php --}}
 <div>
     <x-erp.card class="p-0">
+    
         <div class="flex flex-wrap gap-3 border-b border-gray-100 p-4">
             <input wire:model.live.debounce.300ms="search" placeholder="Cari catatan…"
                 class="rounded-lg border-gray-300 text-sm">
@@ -17,9 +18,9 @@
             </select>
         </div>
 
-        <div class="overflow-x-auto">
+        <div class="overflow-hidden rounded-xl">
             <table class="w-full text-left text-sm">
-                <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+                <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                     <tr>
                         <th class="px-4 py-3">Tanggal</th>
                         <th class="px-4 py-3">Kategori</th>

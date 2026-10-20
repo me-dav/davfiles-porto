@@ -1,6 +1,6 @@
 @props(['active' => false])
 <a {{ $attributes->class([
-    'flex items-center rounded-lg px-3 py-2 font-medium transition',
-    'bg-indigo-50 text-indigo-700' => $active,
-    'text-gray-600 hover:bg-gray-100 hover:text-gray-900' => ! $active,
+    'flex items-center border-l-[3px] px-6 py-2.5 font-medium transition',
+    'border-pink-500 text-pink-600' => $active,
+    'border-transparent text-slate-600 hover:text-pink-600' => !$active,
 ]) }}>{{ $slot }}</a>

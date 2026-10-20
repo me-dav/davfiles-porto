@@ -147,6 +147,7 @@ class Dashboard extends Component
             'balance' => $balance,
             'insight' => $insight,
             'rangeLabel' => $f->translatedFormat('d M Y') . ' – ' . $t->translatedFormat('d M Y'),
+            'recent' => Transaction::with('category')->orderByDesc('transacted_at')->orderByDesc('id')->limit(5)->get(),
         ]);
     }
 }
