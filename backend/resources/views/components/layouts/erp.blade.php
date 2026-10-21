@@ -21,7 +21,7 @@
     <aside class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full bg-white shadow-[0_0_30px_rgba(236,72,153,0.08)]
               transition-transform lg:translate-x-0" :class="{ 'translate-x-0': open }">
         <div
-            class="flex h-16 items-center bg-gradient-to-r from-pink-500 to-purple-500 px-6 text-lg font-bold text-white">
+            class="flex h-16 items-center px-6 text-lg font-bold text-black">
             {{ config('app.name') }}
         </div>
         <nav class="space-y-6 px-0 py-5 text-[13px]"">

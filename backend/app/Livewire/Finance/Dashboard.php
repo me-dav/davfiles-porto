@@ -8,6 +8,7 @@ use App\Support\SummaryService;
 use Carbon\Carbon;
 use Livewire\Attributes\On;
 use Livewire\Component;
+use App\Support\AccountBalance;
 
 class Dashboard extends Component
 {
@@ -128,8 +129,16 @@ class Dashboard extends Component
             $prevCats = SummaryService::byCategory($cf, $ct, $this->donutType)->pluck('total', 'name');
         }
 
-        $all = (int) Transaction::selectRaw("COALESCE(SUM(CASE WHEN type='income' THEN amount ELSE -amount END),0) as bal")->value('bal');
-        $balance = (int) Account::sum('opening_balance') + $all;
+        $balances = AccountBalance::all();
+        $accountCards = Account::where('is_active', true)
+            ->orderByDesc('is_default')->orderBy('name')->get()
+            ->map(fn($a) => [
+                'name' => $a->name,
+                'type' => $a->type,
+                'default' => (bool) $a->is_default,
+                'balance' => $balances[$a->id],
+            ])->all();
+        $balance = array_sum(array_column($accountCards, 'balance'));
 
         $sum = (int) $cats->sum('total');
         $top = $cats->first();
@@ -148,6 +157,7 @@ class Dashboard extends Component
             'insight' => $insight,
             'rangeLabel' => $f->translatedFormat('d M Y') . ' – ' . $t->translatedFormat('d M Y'),
             'recent' => Transaction::with('category')->orderByDesc('transacted_at')->orderByDesc('id')->limit(5)->get(),
+            'accountCards' => $accountCards,
         ]);
     }
 }

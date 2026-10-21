@@ -7,8 +7,8 @@
 
         <form wire:submit="save" class="flex flex-col gap-3 lg:flex-row lg:items-start">
             <div>
-                <input wire:model="name" placeholder="Nama akun (BCA, Dompet…)"
-                    class="w-full rounded-lg border-gray-300 text-sm lg:w-56">
+                <input wire:model="name" placeholder="Nama akun (BCA, Dompet…)" @if(request()->boolean('add')) autofocus
+                @endif class="w-full rounded-lg border-slate-300 text-sm lg:w-56">
                 @error('name')
                 <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
@@ -77,7 +77,10 @@
                                 @endunless
                             @else
                                 <button wire:click="restore({{ $a->id }})"
-                                    class="text-indigo-600 hover:underline">Aktifkan</button>
+                                    class="text-blue-600 hover:underline">Aktifkan</button>
+                                <button wire:click="delete({{ $a->id }})"
+                                    wire:confirm="Hapus akun {{ $a->name }} secara permanen?"
+                                    class="text-gray-400 hover:text-rose-600">Hapus</button>
                             @endif
                         </td>
                     </tr>

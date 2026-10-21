@@ -167,4 +167,27 @@ class AccountManager extends Component
 
         return view('livewire.finance.account-manager', compact('accounts', 'balances', 'syncAccount', 'preview'));
     }
+
+    public function delete(int $id): void
+    {
+        $a = Account::findOrFail($id);
+
+        if ($a->is_default) {
+            $this->addError('general', 'Akun default tidak bisa dihapus. Jadikan akun lain sebagai default dulu.');
+            return;
+        }
+
+        // withTrashed: transaksi yang di-soft-delete masih memegang foreign key
+        if (Transaction::withTrashed()->where('account_id', $a->id)->exists()) {
+            $this->addError('general', "Akun \"{$a->name}\" punya riwayat transaksi, jadi tidak bisa dihapus. Arsipkan saja.");
+            return;
+        }
+
+        $a->delete();
+
+        if ($this->editingId === $id) {
+            $this->cancel();
+        }
+        $this->dispatch('transaction-added');   // segarkan dashboard
+    }
 }

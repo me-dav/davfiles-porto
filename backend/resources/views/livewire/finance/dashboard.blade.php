@@ -59,12 +59,27 @@
     </x-erp.card>
 
     {{-- Kartu --}}
-    <div class="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-        <x-erp.stat color="pink" label="Saldo total" :value="($balance < 0 ? '−' : '') . $rp($balance)" />
-        <x-erp.stat color="purple" label="Masuk" :value="$rp($totals['income'])" :sub="$prevTotals ? 'Pembanding: ' . $rp($prevTotals['income']) : $rangeLabel" />
-        <x-erp.stat color="orange" label="Keluar" :value="$rp($totals['expense'])" :sub="$prevTotals ? 'Pembanding: ' . $rp($prevTotals['expense']) : $rangeLabel" />
-        <x-erp.stat color="blue" label="Selisih" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])"
-            :sub="$prevTotals ? 'Pembanding: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net']) : $rangeLabel" />
+    <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,340px)_1fr]">
+        <x-erp.card>
+            <div class="mb-5 flex items-center justify-between">
+                <h3 class="text-sm font-semibold text-slate-800">
+                    My cards <sup class="ml-0.5 text-xs font-normal text-slate-400">{{ count($accountCards) }}</sup>
+                </h3>
+                <a href="{{ route('finance.accounts', ['add' => 1]) }}"
+                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-blue-600">
+                    Add <span class="text-sm leading-none">+</span>
+                </a>
+            </div>
+
+            <x-erp.balance-stack :total="$balance" :cards="$accountCards" />
+        </x-erp.card>
+
+        <div class="grid gap-5 sm:grid-cols-3">
+            <x-erp.stat color="purple" label="Masuk" :value="$rp($totals['income'])" :sub="$prevTotals ? 'Pembanding: ' . $rp($prevTotals['income']) : $rangeLabel" />
+            <x-erp.stat color="orange" label="Keluar" :value="$rp($totals['expense'])" :sub="$prevTotals ? 'Pembanding: ' . $rp($prevTotals['expense']) : $rangeLabel" />
+            <x-erp.stat color="blue" label="Selisih" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])"
+                :sub="$prevTotals ? 'Pembanding: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net']) : $rangeLabel" />
+        </div>
     </div>
 
     @if($insight)
@@ -100,17 +115,17 @@
 
     {{-- Tabel kategori --}}
     <div class="grid gap-5 lg:grid-cols-[1fr_2fr]">
-        <x-erp.card>
+        <x-erp.card class="">
             <p class="text-sm font-medium text-slate-800">Transaksi terakhir</p>
             <ul class="mt-5 space-y-5">
                 @forelse($recent as $t)
                     <li class="flex items-center gap-3">
                         <span
                             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white
-                                                        {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
+                                                                {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-[13px] font-medium text-slate-800">{{ $t->category->name }}</p>
-                            <p class="truncate text-xs text-slate-400">{{ $t->note ?: '-' }} ·
+                            <p class="truncate text-xs text-slate-400 max-w-xs lg:max-w-full">{{ $t->note ?: '-' }} ·
                                 {{ $t->transacted_at->translatedFormat('d M') }}
                             </p>
                         </div>
