@@ -8,6 +8,8 @@ use App\Models\Transaction;
 use App\Support\MoneyParser;
 use Illuminate\Validation\Rule;
 use Livewire\Component;
+use App\Actions\Finance\SyncAccountBalance;
+use App\Support\AccountBalance;
 
 class AccountManager extends Component
 {
@@ -15,6 +17,8 @@ class AccountManager extends Component
     public string $name = '';
     public string $type = 'cash';
     public string $opening = '0';
+    public ?int $syncId = null;
+    public string $syncAmount = '';
 
     public function edit(int $id): void
     {
@@ -66,6 +70,55 @@ class AccountManager extends Component
         $this->cancel();
     }
 
+    public function openSync(int $id): void
+    {
+        Account::where('is_active', true)->findOrFail($id);
+        $this->syncId = $id;
+        $this->syncAmount = '';
+        $this->resetValidation();
+    }
+
+    public function closeSync(): void
+    {
+        $this->reset('syncId', 'syncAmount');
+        $this->resetValidation();
+    }
+
+    private function parseMoney(string $v): ?int
+    {
+        $v = trim($v);
+        if ($v === '')
+            return null;
+        if (preg_match('/^(rp\.?\s*)?0+$/i', $v))
+            return 0;   // saldo 0 sah, MoneyParser menolaknya
+        try {
+            return MoneyParser::toInt($v);
+        } catch (\InvalidArgumentException) {
+            return null;
+        }
+    }
+
+    public function confirmSync(SyncAccountBalance $action): void
+    {
+        if (!$this->syncId)
+            return;
+
+        $actual = $this->parseMoney($this->syncAmount);
+        if ($actual === null) {
+            $this->addError('syncAmount', 'Nominal tidak valid. Contoh: 90rb, 1,5jt, 0');
+            return;
+        }
+
+        $r = $action->handle($this->syncId, $actual);
+
+        session()->flash('synced', $r['diff'] === 0
+            ? 'Saldo sudah sesuai, tidak ada yang dicatat.'
+            : 'Sync selesai. Selisih ' . ($r['diff'] > 0 ? '+' : '−') . 'Rp ' . number_format(abs($r['diff']), 0, ',', '.') . ' dicatat.');
+
+        $this->closeSync();
+        $this->dispatch('transaction-added');
+    }
+
     private function parseOpening(): ?int
     {
         $v = trim($this->opening);
@@ -104,11 +157,14 @@ class AccountManager extends Component
     public function render()
     {
         $accounts = Account::orderByDesc('is_active')->orderByDesc('is_default')->orderBy('name')->get();
+        $balances = AccountBalance::all();
 
-        // saldo per akun = saldo awal + masuk - keluar
-        $flow = Transaction::selectRaw("account_id, SUM(CASE WHEN type='income' THEN amount ELSE -amount END) as net")
-            ->groupBy('account_id')->pluck('net', 'account_id');
+        $syncAccount = $this->syncId ? $accounts->firstWhere('id', $this->syncId) : null;
+        $actual = $syncAccount ? $this->parseMoney($this->syncAmount) : null;
+        $preview = ($syncAccount && $actual !== null)
+            ? ['actual' => $actual, 'diff' => $actual - $balances[$syncAccount->id]]
+            : null;
 
-        return view('livewire.finance.account-manager', compact('accounts', 'flow'));
+        return view('livewire.finance.account-manager', compact('accounts', 'balances', 'syncAccount', 'preview'));
     }
 }

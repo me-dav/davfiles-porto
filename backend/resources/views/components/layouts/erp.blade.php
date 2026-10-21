@@ -1,3 +1,9 @@
+@php
+    $u = auth()->user();
+    $initials = collect(explode(' ', trim($u->name)))->filter()->take(2)
+        ->map(fn($w) => mb_strtoupper(mb_substr($w, 0, 1)))->join('');
+@endphp
+
 @props(['title' => ''])
 <!DOCTYPE html>
 <html lang="id">
@@ -60,14 +66,41 @@
 
     <div class="lg:pl-60">
         {{-- Topbar --}}
-        <header class="sticky top-0 z-30 flex h-16 items-center justify-between bg-white/50 backdrop-blur-sm px-4 shadow-sm lg:px-8">
+        <header
+            class="sticky top-0 z-30 flex h-16 items-center justify-between bg-white/50 backdrop-blur-sm px-4 shadow-sm lg:px-8">
             <button class="lg:hidden" @click="open = !open" aria-label="Menu">☰</button>
             <div class="hidden text-sm text-gray-500 lg:block">{{ $title }}</div>
-            <div class="flex items-center gap-4 text-sm">
-                <span>{{ auth()->user()->name }}</span>
-                {{-- <form method="POST" action="{{ route('logout') }}">@csrf
-                    <button class="text-gray-500 hover:text-gray-900">Keluar</button>
-                </form> --}}
+            <div class="relative" x-data="{ o: false }" @click.outside="o = false" @keydown.escape.window="o = false">
+                <button type="button" @click="o = !o" aria-haspopup="true" :aria-expanded="o"
+                    class="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 transition hover:bg-slate-100">
+                    @if($u->avatar_url)
+                        <img src="{{ $u->avatar_url }}" alt="" referrerpolicy="no-referrer"
+                            class="h-8 w-8 rounded-full object-cover">
+                    @else
+                        <span
+                            class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-xs font-semibold text-white">{{ $initials }}</span>
+                    @endif
+                    <span class="hidden text-sm font-medium text-slate-700 sm:block">{{ $u->name }}</span>
+                    <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
+                        <path
+                            d="M5.23 7.21a.75.75 0 011.06.02L10 11.17l3.71-3.94a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" />
+                    </svg>
+                </button>
+
+                <div x-show="o" x-cloak x-transition.origin.top.right
+                    class="absolute right-0 mt-2 w-60 overflow-hidden rounded-xl bg-white shadow-lg ring-1 ring-slate-900/5">
+                    <div class="border-b border-slate-100 px-4 py-3">
+                        <p class="truncate text-sm font-medium text-slate-900">{{ $u->name }}</p>
+                        <p class="truncate text-xs text-slate-500">{{ $u->email }}</p>
+                    </div>
+                    <a href="{{ route('profile') }}"
+                        class="block px-4 py-2.5 text-sm text-slate-700 hover:bg-slate-50">Profil</a>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit"
+                            class="block w-full px-4 py-2.5 text-left text-sm text-rose-600 hover:bg-rose-50">Keluar</button>
+                    </form>
+                </div>
             </div>
         </header>
 

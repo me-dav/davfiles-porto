@@ -1,18 +1,24 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Auth\GoogleAuthController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
-Route::view('/', 'welcome');
+Route::get('/', fn() => redirect()->route(auth()->check() ? 'dashboard' : 'login'));
 
-// Route::view('dashboard', 'dashboard')
-//     ->middleware(['auth', 'verified'])
-//     ->name('dashboard');
+Route::middleware(['guest', 'throttle:20,1'])->group(function () {
+    Route::get('auth/google', [GoogleAuthController::class, 'redirect'])->name('auth.google');
+    Route::get('auth/google/callback', [GoogleAuthController::class, 'callback']);
+});
 
-// Route::view('profile', 'profile')
-//     ->middleware(['auth'])
-//     ->name('profile');
+Route::post('/logout', function (Request $request) {
+    Auth::guard('web')->logout();
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
 
-Route::redirect('/', '/dashboard');
+    return redirect()->route('login');
+})->middleware('auth')->name('logout');
 
 Route::middleware('auth')->get('/pending', fn() => view('pending'))->name('pending');
 
