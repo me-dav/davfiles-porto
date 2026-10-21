@@ -11,6 +11,8 @@ import { apiFetch } from "@/lib/api";
 import type { ProjectsResponse } from "@/types/project";
 import type { JournalResponse } from "@/types/journal";
 
+export const dynamic = 'force-dynamic'
+
 // ISR — revalidate every 60 seconds
 export const revalidate = 60;
 

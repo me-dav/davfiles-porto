@@ -6,6 +6,8 @@ import { apiFetch } from '@/lib/api'
 import type { JournalResponse } from '@/types/journal'
 import type { JournalType } from '@/types/journal'
 
+export const dynamic = 'force-dynamic'
+
 export const revalidate = 60
 
 export const metadata: Metadata = {

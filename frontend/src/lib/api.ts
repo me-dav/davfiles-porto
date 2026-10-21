@@ -34,7 +34,13 @@ export default api;
 
 // ─── Typed fetchers (used in server components / ISR) ────────────────────────
 
-const BASE = `${process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000"}/api/v1`;
+const PUBLIC_API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000";
+// di server (container web) pakai alamat internal Docker, di browser pakai URL publik
+const ROOT =
+  typeof window === "undefined"
+    ? (process.env.API_INTERNAL_URL ?? PUBLIC_API)
+    : PUBLIC_API;
+const BASE = `${ROOT}/api/v1`;
 
 export async function apiFetch<T>(
   path: string,
@@ -43,6 +49,7 @@ export async function apiFetch<T>(
   const res = await fetch(`${BASE}${path}`, {
     headers: { Accept: "application/json" },
     next: { revalidate: 60, tags },
+    signal: AbortSignal.timeout(10000),
   });
   const json = await res.json().catch(() => null);
   if (!res.ok || !json?.success) {

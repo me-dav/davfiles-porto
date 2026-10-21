@@ -7,6 +7,8 @@ import Layout from '@/components/layout/Layout'
 import { apiFetch } from '@/lib/api'
 import type { Project } from '@/types/project'
 
+export const dynamic = 'force-dynamic'
+
 export const revalidate = 60
 
 interface Props {

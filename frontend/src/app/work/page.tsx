@@ -5,6 +5,8 @@ import ProjectsGrid from '@/components/sections/ProjectsGrid'
 import { apiFetch } from '@/lib/api'
 import type { ProjectsResponse } from '@/types/project'
 
+export const dynamic = 'force-dynamic'
+
 export const revalidate = 60
 
 export const metadata: Metadata = {
