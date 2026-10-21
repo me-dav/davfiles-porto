@@ -139,7 +139,12 @@ class JournalManager extends Component
     public function delete(int $id): void
     {
         $this->guard();
-        JournalEntry::findOrFail($id)->delete();
+        $p = JournalEntry::findOrFail($id);
+
+        if ($p->image_path) {
+            Storage::disk('public')->delete($p->image_path);
+        }
+        $p->forceDelete();
     }
 
     public function render()

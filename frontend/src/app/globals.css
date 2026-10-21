@@ -1,4 +1,5 @@
 @tailwind utilities;
+@plugin "@tailwindcss/typography";
 
 /* ─── Fonts ──────────────────────────────────────────────────────────────── */
 /* Download from fontshare.com → place in public/fonts/ */

@@ -1,48 +1,50 @@
 // src/app/journal/[slug]/page.tsx
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import Layout from '@/components/layout/Layout'
-import { apiFetch } from '@/lib/api'
-import type { JournalEntry } from '@/types/journal'
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import Layout from "@/components/layout/Layout";
+import { apiFetch } from "@/lib/api";
+import type { JournalEntry } from "@/types/journal";
 
-export const dynamic = 'force-dynamic'
-
-export const revalidate = 60
+export const dynamic = "force-dynamic";
 
 interface Props {
-  params: { slug: string }
+  params: { slug: string };
 }
 
 async function getEntry(slug: string): Promise<JournalEntry | null> {
   try {
-    const data = await apiFetch<{ entry: JournalEntry }>(`/journal/${slug}`)
-    return data.entry
-  } catch {
-    return null
+    const data = await apiFetch<{ entry: JournalEntry }>(`/journal/${slug}`);
+    return data.entry;
+  } catch (e) {
+    console.error("[journal]", e);
+    return null;
   }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const entry = await getEntry(params.slug)
-  if (!entry) return { title: 'Not Found' }
+  const entry = await getEntry(params.slug);
+  if (!entry) return { title: "Not Found" };
   return {
     title: entry.title,
     openGraph: {
       images: entry.hero_image_url ? [{ url: entry.hero_image_url }] : [],
     },
-  }
+  };
 }
 
 export default async function JournalEntryPage({ params }: Props) {
-  const entry = await getEntry(params.slug)
-  if (!entry) notFound()
+  const entry = await getEntry(params.slug);
+  if (!entry) notFound();
 
   const date = entry.published_at
-    ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-        .format(new Date(entry.published_at))
-    : null
+    ? new Intl.DateTimeFormat("en-GB", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(new Date(entry.published_at))
+    : null;
 
   return (
     <Layout heroPage>
@@ -56,12 +58,15 @@ export default async function JournalEntryPage({ params }: Props) {
             priority
             sizes="100vw"
             className="object-cover"
-            style={{ filter: 'brightness(0.3) saturate(0.7)' }}
+            style={{ filter: "brightness(0.3) saturate(0.7)" }}
           />
         ) : (
           <div className="absolute inset-0 bg-graphite" />
         )}
-        <div className="absolute inset-0 bg-vignette-bottom" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-vignette-bottom"
+          aria-hidden="true"
+        />
 
         <div className="relative z-10 max-w-3xl">
           <Link
@@ -87,7 +92,9 @@ export default async function JournalEntryPage({ params }: Props) {
           {entry.tags?.length > 0 && (
             <div className="mt-4 flex flex-wrap gap-2">
               {entry.tags.map((tag) => (
-                <span key={tag} className="font-body text-[10px] text-sand/60">#{tag}</span>
+                <span key={tag} className="font-body text-[10px] text-sand/60">
+                  #{tag}
+                </span>
               ))}
             </div>
           )}
@@ -96,15 +103,17 @@ export default async function JournalEntryPage({ params }: Props) {
 
       {/* ── Body ── */}
       <section className="px-8 md:px-16 py-20 max-w-4xl">
-        {entry.body ? (
+        {entry.body_html ? (
           <div
             className="prose prose-invert max-w-none text-justify"
-            dangerouslySetInnerHTML={{ __html: entry.body }}
+            dangerouslySetInnerHTML={{ __html: entry.body_html }}
           />
         ) : (
-          <p className="font-body text-stone italic text-sm">Content coming soon.</p>
+          <p className="font-body text-stone italic text-sm">
+            Content coming soon.
+          </p>
         )}
       </section>
     </Layout>
-  )
+  );
 }

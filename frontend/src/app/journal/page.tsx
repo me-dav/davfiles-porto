@@ -27,7 +27,7 @@ const FILTERS: { label: string; type?: JournalType }[] = [
 async function getEntries(type?: string) {
   try {
     const q = type ? `?type=${type}` : ''
-    const data = await apiFetch<JournalResponse>(`/journal${q}`)
+    const data = await apiFetch<JournalResponse>(`/journal${q}`,)
     return data.entries
   } catch {
     return []

@@ -1,44 +1,45 @@
 // src/app/work/[slug]/page.tsx
-import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
-import Image from 'next/image'
-import Link from 'next/link'
-import Layout from '@/components/layout/Layout'
-import { apiFetch } from '@/lib/api'
-import type { Project } from '@/types/project'
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import Link from "next/link";
+import Layout from "@/components/layout/Layout";
+import { apiFetch } from "@/lib/api";
+import type { Project } from "@/types/project";
 
-export const dynamic = 'force-dynamic'
-
-export const revalidate = 60
+export const dynamic = "force-dynamic";
 
 interface Props {
-  params: { slug: string }
+  params: { slug: string };
 }
 
 async function getProject(slug: string): Promise<Project | null> {
   try {
-    const data = await apiFetch<{ project: Project }>(`/projects/${slug}`)
-    return data.project
-  } catch {
-    return null
+    const data = await apiFetch<{ project: Project }>(`/projects/${slug}`);
+    return data.project;
+  } catch (e) {
+    console.error("[project]", e);
+    return null;
   }
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const project = await getProject(params.slug)
-  if (!project) return { title: 'Project Not Found' }
+  const project = await getProject(params.slug);
+  if (!project) return { title: "Project Not Found" };
   return {
     title: project.name,
     description: project.short_description,
     openGraph: {
-      images: project.preview_image_url ? [{ url: project.preview_image_url }] : [],
+      images: project.preview_image_url
+        ? [{ url: project.preview_image_url }]
+        : [],
     },
-  }
+  };
 }
 
 export default async function ProjectDetailPage({ params }: Props) {
-  const project = await getProject(params.slug)
-  if (!project) notFound()
+  const project = await getProject(params.slug);
+  if (!project) notFound();
 
   return (
     <Layout heroPage>
@@ -52,12 +53,15 @@ export default async function ProjectDetailPage({ params }: Props) {
             priority
             sizes="100vw"
             className="object-cover"
-            style={{ filter: 'brightness(0.3) saturate(0.7)' }}
+            style={{ filter: "brightness(0.3) saturate(0.7)" }}
           />
         ) : (
           <div className="absolute inset-0 bg-graphite" />
         )}
-        <div className="absolute inset-0 bg-vignette-bottom" aria-hidden="true" />
+        <div
+          className="absolute inset-0 bg-vignette-bottom"
+          aria-hidden="true"
+        />
 
         <div className="relative z-10 max-w-4xl">
           {/* Back link */}
@@ -75,15 +79,19 @@ export default async function ProjectDetailPage({ params }: Props) {
           {/* Meta */}
           <div className="mt-5 flex flex-wrap gap-6">
             {[
-              { label: 'Role',  value: project.role },
-              { label: 'Year',  value: String(project.year) },
-              { label: 'Stack', value: project.stack.join(', ') },
-            ].map(({ label, value }) => value ? (
-              <div key={label}>
-                <p className="font-body text-[9px] uppercase tracking-wide2 text-sand mb-1">{label}</p>
-                <p className="font-body text-sm text-ash">{value}</p>
-              </div>
-            ) : null)}
+              { label: "Role", value: project.role },
+              { label: "Year", value: String(project.year) },
+              { label: "Stack", value: project.stack.join(", ") },
+            ].map(({ label, value }) =>
+              value ? (
+                <div key={label}>
+                  <p className="font-body text-[9px] uppercase tracking-wide2 text-sand mb-1">
+                    {label}
+                  </p>
+                  <p className="font-body text-sm text-ash">{value}</p>
+                </div>
+              ) : null,
+            )}
           </div>
 
           {/* External links */}
@@ -118,15 +126,17 @@ export default async function ProjectDetailPage({ params }: Props) {
           {project.short_description}
         </p>
 
-        {project.body ? (
+        {project.body_html ? (
           <div
             className="prose prose-invert max-w-none text-justify"
-            dangerouslySetInnerHTML={{ __html: project.body }}
+            dangerouslySetInnerHTML={{ __html: project.body_html }}
           />
         ) : (
-          <p className="font-body text-sm text-stone italic">Case study coming soon.</p>
+          <p className="font-body text-sm text-stone italic">
+            Case study coming soon.
+          </p>
         )}
       </section>
     </Layout>
-  )
+  );
 }

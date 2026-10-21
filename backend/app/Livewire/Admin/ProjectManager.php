@@ -151,7 +151,12 @@ class ProjectManager extends Component
     public function delete(int $id): void
     {
         $this->guard();
-        Project::findOrFail($id)->delete();   // soft delete, gambar tetap aman
+        $p = Project::findOrFail($id);
+
+        if ($p->image_path) {
+            Storage::disk('public')->delete($p->image_path);
+        }
+        $p->forceDelete();
     }
 
     public function render()

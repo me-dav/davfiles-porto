@@ -1,24 +1,26 @@
 // src/types/journal.ts
 export type JournalType =
-  | 'exploration'
-  | 'server-notes'
-  | 'hiking'
-  | 'ui-thoughts'
-  | 'learning-log'
+  | "exploration"
+  | "server-notes"
+  | "hiking"
+  | "ui-thoughts"
+  | "learning-log";
 
 export interface JournalEntry {
-  id: number
-  title: string
-  slug: string
-  type: JournalType
-  hero_image_url: string
-  body?: string
-  tags: string[]
-  status: 'draft' | 'published'
-  published_at: string
+  id: number;
+  title: string;
+  slug: string;
+  type: JournalType;
+  hero_image_url: string;
+  body?: string;
+  body_html?: string;
+  body_markdown?: string;
+  tags: string[];
+  status: "draft" | "published";
+  published_at: string;
 }
 
 export interface JournalResponse {
-  entries: JournalEntry[]
-  meta: { total: number; per_page: number; current_page: number }
+  entries: JournalEntry[];
+  meta: { total: number; per_page: number; current_page: number };
 }
