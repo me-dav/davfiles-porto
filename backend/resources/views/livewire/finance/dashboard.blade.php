@@ -37,25 +37,8 @@
                 <button wire:click="$set('donutType','income')"
                     class="rounded-md px-3 py-1.5 {{ $btn($donutType === 'income') }}">Masuk</button>
             </div>
-
-            <label class="flex items-center gap-2 text-sm text-gray-700">
-                <input type="checkbox" wire:model.live="compare" class="rounded border-gray-300 text-indigo-600">
-                Bandingkan
-            </label>
-
-            @if($compare)
-                <select wire:model.live="compareMode" class="rounded-lg border-gray-300 text-sm">
-                    <option value="previous">Periode sebelumnya</option>
-                    <option value="custom">Rentang custom</option>
-                </select>
-                @if($compareMode === 'custom')
-                    <input type="date" wire:model.live="cFrom" class="rounded-lg border-gray-300 text-sm">
-                    <span class="text-gray-400">–</span>
-                    <input type="date" wire:model.live="cTo" class="rounded-lg border-gray-300 text-sm">
-                @endif
-            @endif
         </div>
-        <p class="mt-3 text-xs text-gray-500">Periode: {{ $rangeLabel }}</p>
+        <p class="mt-3 text-xs text-slate-500">Periode: {{ $rangeLabel }} · dibandingkan dengan {{ $prevLabel }}</p>
     </x-erp.card>
 
     {{-- Kartu --}}
@@ -75,10 +58,14 @@
         </x-erp.card>
 
         <div class="grid gap-5 sm:grid-cols-3">
-            <x-erp.stat color="purple" label="Masuk" :value="$rp($totals['income'])" :sub="$prevTotals ? 'Pembanding: ' . $rp($prevTotals['income']) : $rangeLabel" />
-            <x-erp.stat color="orange" label="Keluar" :value="$rp($totals['expense'])" :sub="$prevTotals ? 'Pembanding: ' . $rp($prevTotals['expense']) : $rangeLabel" />
+            <x-erp.stat color="purple" label="Masuk" :value="$rp($totals['income'])" :delta="$deltas['income']"
+                :good-when-up="true" :sub="'Sebelumnya: ' . $rp($prevTotals['income'])" />
+
+            <x-erp.stat color="orange" label="Keluar" :value="$rp($totals['expense'])" :delta="$deltas['expense']"
+                :good-when-up="false" :sub="'Sebelumnya: ' . $rp($prevTotals['expense'])" />
+
             <x-erp.stat color="blue" label="Selisih" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])"
-                :sub="$prevTotals ? 'Pembanding: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net']) : $rangeLabel" />
+                :delta="$deltas['net']" :good-when-up="true" :sub="'Sebelumnya: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net'])" />
         </div>
     </div>
 
@@ -122,7 +109,7 @@
                     <li class="flex items-center gap-3">
                         <span
                             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white
-                                                                {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
+                                                                                {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-[13px] font-medium text-slate-800">{{ $t->category->name }}</p>
                             <p class="truncate text-xs text-slate-400 max-w-xs lg:max-w-full">{{ $t->note ?: '-' }} ·
@@ -145,9 +132,6 @@
                             <th class="px-4 py-3">Kategori</th>
                             <th class="px-4 py-3 text-right">Total</th>
                             <th class="px-4 py-3 text-right">%</th>
-                            @if($compare)
-                                <th class="px-4 py-3 text-right">Pembanding</th>
-                            <th class="px-4 py-3 text-right">Perubahan</th>@endif
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-100">
@@ -159,12 +143,6 @@
                                 <td class="px-4 py-3 text-right tabular-nums text-gray-500">
                                     {{ $sum ? round($c->total / $sum * 100) : 0 }}%
                                 </td>
-                                @if($compare)
-                                    <td class="px-4 py-3 text-right tabular-nums text-gray-500">{{ $rp($prev) }}</td>
-                                    <td class="px-4 py-3 text-right">
-                                        {!! $badge($this->pct((int) $c->total, $prev), $donutType === 'income') ?: '<span class="text-xs text-gray-400">baru</span>' !!}
-                                    </td>
-                                @endif
                             </tr>
                         @empty
                             <tr>

@@ -1,4 +1,3 @@
-{{-- resources/views/components/erp/balance-stack.blade.php --}}
 @props(['total', 'cards' => []])
 @php
     $rp = fn($n) => ($n < 0 ? '−' : '') . 'Rp ' . number_format(abs($n), 0, ',', '.');
@@ -19,51 +18,47 @@
             'front' => false,
         ], $cards)
     );
-
     $n = count($items);
-    $H = 132;        // tinggi kartu
-    $peek = 16;      // tinggi kartu belakang yang mengintip
-    $step = 84;      // jarak antar kartu saat merekah
-    $maxBack = 3;    // maksimal kartu belakang yang terlihat saat menumpuk
-    $v = min($n - 1, $maxBack);
-    $hClosed = $H + $v * $peek;
-    $hOpen = ($n - 1) * $step + $H;
 @endphp
 
-<div x-data="{ open: false }" role="button" tabindex="0" :aria-expanded="open"
-    aria-label="Saldo total dan saldo per akun" @if($n > 1) @click="open = !open" @keydown.enter.prevent="open = !open"
-    @keydown.space.prevent="open = !open" @endif :style="open ? 'height:{{ $hOpen }}px' : 'height:{{ $hClosed }}px'"
-    class="relative w-full select-none transition-[height] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none {{ $n > 1 ? 'cursor-pointer' : '' }}">
+{{-- wire:key: kalau jumlah akun berubah, komponen dibuat ulang dengan state baru --}}
+<div wire:key="stack-{{ $n }}" x-data="balanceStack({ n: {{ $n }}, h: 132, peek: 16, step: 84, maxBack: 3 })">
 
-    @foreach($items as $i => $it)
-        @php
-            $level = min($i, $maxBack);
-            $topClosed = ($v - $level) * $peek;
-            $inset = $level * 10;
-            $hidden = $i > $maxBack ? 0 : 1;
-            $grad = $it['front'] ? 'from-blue-600 to-sky-500' : $grads[($i - 1) % count($grads)];
-        @endphp
+    <div role="group" aria-roledescription="carousel" aria-label="Saldo total dan saldo per akun" tabindex="0"
+        @pointerdown="down($event)" @pointermove="move($event)" @pointerup="up($event)" @pointercancel="cancel()"
+        @keydown.enter.prevent="toggle()" @keydown.space.prevent="toggle()" @keydown.arrow-left.prevent="next()"
+        @keydown.arrow-right.prevent="prev()" :style="'height:' + height() + 'px'"
+        class="relative min-h-[132px] w-full touch-pan-y select-none outline-none transition-[height] duration-500
+                ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none {{ $n > 1 ? 'cursor-grab active:cursor-grabbing' : '' }}">
 
-        <div class="absolute transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
-            :style="open
-                    ? 'top:{{ $i * $step }}px;left:0;right:0;opacity:1;z-index:{{ $i + 1 }}'
-                    : 'top:{{ $topClosed }}px;left:{{ $inset }}px;right:{{ $inset }}px;opacity:{{ $hidden }};z-index:{{ $n - $i }}'">
-            <div class="flex flex-col rounded-2xl bg-gradient-to-br {{ $grad }} text-white shadow-lg ring-1 ring-white/10"
-                style="height: {{ $H }}px">
+        @foreach($items as $i => $it)
+            @php $grad = $it['front'] ? 'from-blue-600 to-sky-500' : $grads[($i - 1) % count($grads)]; @endphp
+            <div class="absolute transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
+                :style="cardStyle({{ $i }})">
                 <div
-                    class="flex h-4 shrink-0 items-center justify-between px-4 text-[10px] font-medium uppercase tracking-wider opacity-90">
-                    <span class="truncate">{{ $it['name'] }}</span>
-                    <span>{{ $it['sub'] }}</span>
-                </div>
-                <div class="flex flex-1 flex-col justify-between px-4 pb-3 pt-3">
-                    <p class="text-2xl font-bold tabular-nums">{{ $rp($it['balance']) }}</p>
-                    @if($it['front'] && $n > 1)
-                        <p class="flex items-center gap-1 text-[11px] opacity-80">
-                            <span x-text="open ? 'Ketuk untuk menutup' : 'Ketuk untuk lihat per akun'"></span>
-                        </p>
-                    @endif
+                    class="flex h-[132px] flex-col rounded-2xl bg-gradient-to-br {{ $grad }} text-white shadow-lg ring-1 ring-white/10">
+                    <div
+                        class="flex h-4 shrink-0 items-center justify-between px-4 text-[10px] font-medium uppercase tracking-wider opacity-90">
+                        <span class="truncate">{{ $it['name'] }}</span>
+                        <span>{{ $it['sub'] }}</span>
+                    </div>
+                    <div class="flex flex-1 items-end px-4 pb-4">
+                        <p class="text-2xl font-bold tabular-nums">{{ $rp($it['balance']) }}</p>
+                    </div>
                 </div>
             </div>
+        @endforeach
+    </div>
+
+    @if($n > 1)
+        <div x-show="!open" class="mt-3 flex justify-center gap-1.5">
+            @foreach($items as $i => $it)
+                <button type="button" @click="goTo({{ $i }})" aria-label="Tampilkan {{ $it['name'] }}"
+                    :class="order[0] === {{ $i }} ? 'w-4 bg-blue-600' : 'w-1.5 bg-slate-300'"
+                    class="h-1.5 rounded-full transition-all duration-300"></button>
+            @endforeach
         </div>
-    @endforeach
+        <p class="mt-2 text-center text-[11px] text-slate-400"
+            x-text="open ? 'Ketuk untuk menutup' : 'Geser untuk ganti kartu · ketuk untuk lihat semua'"></p>
+    @endif
 </div>

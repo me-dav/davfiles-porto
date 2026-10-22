@@ -7,5 +7,9 @@
         <x-erp.card>
             <livewire:profile.update-password-form />
         </x-erp.card>
+
+        @if(auth()->user()->hasModule('finance'))
+            <livewire:settings.api-keys />
+        @endif
     </div>
 </x-layouts.erp>

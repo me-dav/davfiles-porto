@@ -15,10 +15,6 @@ class Dashboard extends Component
     public string $preset = 'month';          // week | month | 3months | custom
     public string $from = '';
     public string $to = '';
-    public bool $compare = false;
-    public string $compareMode = 'previous';  // previous | custom
-    public string $cFrom = '';
-    public string $cTo = '';
     public string $donutType = 'expense';
 
     public function mount(): void
@@ -66,43 +62,45 @@ class Dashboard extends Component
         return $f->gt($t) ? [$t, $f] : [$f, $t];
     }
 
-    private function compareRange(Carbon $f, Carbon $t): array
+    private function previousRange(Carbon $f, Carbon $t): array
     {
-        if ($this->compareMode === 'custom' && $this->cFrom && $this->cTo) {
-            $cf = Carbon::parse($this->cFrom)->startOfDay();
-            $ct = Carbon::parse($this->cTo)->startOfDay();
-            return $cf->gt($ct) ? [$ct, $cf] : [$cf, $ct];
+        $months = match ($this->preset) {
+            'month' => 1,
+            '3months' => 3,
+            default => 0,
+        };
+
+        if ($months > 0) {
+            // hari yang sama di bulan sebelumnya (tanggal 31 otomatis dipotong ke akhir bulan)
+            return [$f->copy()->subMonthsNoOverflow($months), $t->copy()->subMonthsNoOverflow($months)];
         }
+
+        // 7 hari dan custom: rentang sama panjang tepat sebelumnya
         $days = (int) $f->diffInDays($t) + 1;
-        $ct = $f->copy()->subDay();
-        return [$ct->copy()->subDays($days - 1), $ct];
+        return [$f->copy()->subDays($days), $t->copy()->subDays($days)];
+    }
+
+    public function delta(int $cur, int $prev): ?array
+    {
+        if ($cur === 0 && $prev === 0)
+            return null;
+        if ($prev === 0)
+            return ['pct' => null, 'dir' => $cur > 0 ? 'up' : 'down'];   // "baru"
+
+        $pct = round(($cur - $prev) / abs($prev) * 100, 1);
+        return ['pct' => $pct, 'dir' => $pct > 0 ? 'up' : ($pct < 0 ? 'down' : 'flat')];
     }
 
     public function chartData(): array
     {
         [$f, $t] = $this->range();
-        $step = SummaryService::step($f, $t);
-        $cur = SummaryService::timeline($f, $t, $step);
-        $n = count($cur['labels']);
-
-        $cmp = null;
-        if ($this->compare) {
-            [$cf, $ct] = $this->compareRange($f, $t);
-            $c = SummaryService::timeline($cf, $ct, $step);
-            // disejajarkan per urutan: hari/minggu ke-1 vs ke-1, dst
-            $cmp = [
-                'income' => array_pad(array_slice($c['income'], 0, $n), $n, 0),
-                'expense' => array_pad(array_slice($c['expense'], 0, $n), $n, 0),
-            ];
-        }
-
+        $cur = SummaryService::timeline($f, $t);
         $cats = SummaryService::byCategory($f, $t, $this->donutType);
 
         return [
             'labels' => $cur['labels'],
             'income' => $cur['income'],
             'expense' => $cur['expense'],
-            'cmp' => $cmp,
             'donut' => [
                 'labels' => $cats->pluck('name')->all(),
                 'values' => $cats->pluck('total')->map(fn($v) => (int) $v)->all(),
@@ -110,24 +108,22 @@ class Dashboard extends Component
         ];
     }
 
-    public function pct(int $cur, int $prev): ?float
-    {
-        return $prev === 0 ? null : round(($cur - $prev) / $prev * 100, 1);
-    }
 
     public function render()
     {
         [$f, $t] = $this->range();
+        [$pf, $pt] = $this->previousRange($f, $t);
+
         $totals = SummaryService::totals($f, $t);
+        $prevTotals = SummaryService::totals($pf, $pt);
         $cats = SummaryService::byCategory($f, $t, $this->donutType);
 
-        $prevTotals = null;
-        $prevCats = collect();
-        if ($this->compare) {
-            [$cf, $ct] = $this->compareRange($f, $t);
-            $prevTotals = SummaryService::totals($cf, $ct);
-            $prevCats = SummaryService::byCategory($cf, $ct, $this->donutType)->pluck('total', 'name');
-        }
+        $deltas = [
+            'income' => $this->delta($totals['income'], $prevTotals['income']),
+            'expense' => $this->delta($totals['expense'], $prevTotals['expense']),
+            'net' => $this->delta($totals['net'], $prevTotals['net']),
+        ];
+        $prevLabel = $pf->translatedFormat('d M') . ' – ' . $pt->translatedFormat('d M Y');
 
         $balances = AccountBalance::all();
         $accountCards = Account::where('is_active', true)
@@ -151,7 +147,8 @@ class Dashboard extends Component
             'totals' => $totals,
             'prevTotals' => $prevTotals,
             'cats' => $cats,
-            'prevCats' => $prevCats,
+            'deltas' => $deltas,
+            'prevLabel' => $prevLabel,
             'sum' => $sum,
             'balance' => $balance,
             'insight' => $insight,

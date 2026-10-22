@@ -1,5 +1,4 @@
-{{-- components/erp/stat.blade.php --}}
-@props(['label', 'value', 'sub' => null, 'color' => 'pink'])
+@props(['label', 'value', 'sub' => null, 'color' => 'blue', 'delta' => null, 'goodWhenUp' => true])
 @php
     $bg = [
         'pink' => 'from-pink-500 to-rose-400',
@@ -7,9 +6,29 @@
         'orange' => 'from-amber-400 to-orange-500',
         'blue' => 'from-sky-400 to-blue-500',
     ][$color];
+
+    $pill = null;
+    if ($delta) {
+        $dir = $delta['dir'];
+        $good = $dir === 'flat' ? null : (($dir === 'up') === $goodWhenUp);
+        $pill = [
+            'arrow' => $dir === 'up' ? '▲' : ($dir === 'down' ? '▼' : '–'),
+            'text' => $delta['pct'] === null
+                ? 'baru'
+                : rtrim(rtrim(number_format(abs($delta['pct']), 1, ',', '.'), '0'), ',') . '%',
+            'cls' => $good === null ? 'text-slate-500' : ($good ? 'text-emerald-600' : 'text-rose-600'),
+        ];
+    }
 @endphp
 <div class="relative overflow-hidden rounded-2xl bg-gradient-to-br {{ $bg }} p-5 text-white shadow-lg">
-    <p class="text-xs font-medium opacity-90">{{ $label }}</p>
+    <div class="relative z-10 flex items-start justify-between gap-2">
+        <p class="text-xs font-medium opacity-90">{{ $label }}</p>
+        @if($pill)
+            <span
+                class="rounded-full bg-white px-2 py-0.5 text-[11px] font-semibold {{ $pill['cls'] }}">{{ $pill['arrow'] }}
+                {{ $pill['text'] }}</span>
+        @endif
+    </div>
     <p class="mt-6 text-2xl font-bold tabular-nums">{{ $value }}</p>
     @if($sub)
     <p class="mt-1 text-[11px] opacity-80">{{ $sub }}</p>@endif

@@ -101,6 +101,8 @@ class FinanceApiController extends Controller
             $accountId = $acc->id;
         }
 
+        $source = mb_substr($r->user()->currentAccessToken()?->name ?? 'api', 0, 20);
+
         $tx = $action->handle([
             'account_id' => $accountId,
             'type' => $r->type,
@@ -108,7 +110,7 @@ class FinanceApiController extends Controller
             'category_id' => $cat->id,
             'note' => $r->note,
             'transacted_at' => $r->date ? Carbon::parse($r->date) : today(),
-            'source' => 'hermes',
+            'source' => $source,
             'idempotency_key' => $key,
         ])->load(['category', 'account']);
 
