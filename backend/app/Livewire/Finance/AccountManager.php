@@ -178,8 +178,13 @@ class AccountManager extends Component
         }
 
         // withTrashed: transaksi yang di-soft-delete masih memegang foreign key
-        if (Transaction::withTrashed()->where('account_id', $a->id)->exists()) {
-            $this->addError('general', "Akun \"{$a->name}\" punya riwayat transaksi, jadi tidak bisa dihapus. Arsipkan saja.");
+        $dipakai = Transaction::withTrashed()->where('account_id', $a->id)->exists()
+            || \App\Models\Transfer::withTrashed()
+                ->where(fn($q) => $q->where('from_account_id', $a->id)->orWhere('to_account_id', $a->id))
+                ->exists();
+
+        if ($dipakai) {
+            $this->addError('general', "Akun \"{$a->name}\" punya riwayat transaksi atau transfer, jadi tidak bisa dihapus. Arsipkan saja.");
             return;
         }
 

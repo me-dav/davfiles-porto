@@ -6,7 +6,9 @@ namespace App\Http\Controllers\Api\V1;
 use App\Actions\Finance\AddTransaction;
 use App\Http\Controllers\Controller;
 use App\Models\{Account, FinanceCategory, Transaction};
-use App\Support\{ApiResponse, CategoryResolver, MoneyParser, SummaryService};
+use App\Support\{ApiResponse, CategoryResolver, MoneyParser, SummaryService, AccountBalance};
+use App\Actions\Finance\AddTransfer;
+use App\Models\Transfer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -132,6 +134,71 @@ class FinanceApiController extends Controller
             'totals' => SummaryService::totals($start, $end),
             'top_expense_categories' => SummaryService::byCategory($start, $end, 'expense')->take(5)->values(),
         ], 'Summary fetched');
+    }
+
+    public function transfer(Request $r, AddTransfer $action)
+    {
+        $r->validate([
+            'from' => 'required|string|max:60',
+            'to' => 'required|string|max:60',
+            'amount' => 'required',
+            'fee' => 'nullable',
+            'note' => 'nullable|string|max:255',
+            'date' => 'nullable|date|before_or_equal:today',
+        ]);
+
+        $key = $r->header('Idempotency-Key');
+        if ($key && Transfer::where('idempotency_key', $key)->exists()) {
+            return $this->ok(null, 'Duplicate ignored');
+        }
+
+        $find = fn(string $n) => Account::where('is_active', true)
+            ->whereRaw('LOWER(name) = ?', [mb_strtolower(trim($n))])->first();
+
+        $from = $find($r->from);
+        $to = $find($r->to);
+        if (!$from || !$to) {
+            $list = Account::where('is_active', true)->pluck('name')->join(', ');
+            return $this->fail('Account not found: ' . (!$from ? $r->from : $r->to) . ". Available: {$list}", 422);
+        }
+        if ($from->id === $to->id) {
+            return $this->fail('Source and destination account must be different', 422);
+        }
+
+        try {
+            $amount = MoneyParser::toInt(is_numeric($r->amount) ? (int) $r->amount : (string) $r->amount);
+            $fee = filled($r->fee) && !preg_match('/^\s*0+\s*$/', (string) $r->fee)
+                ? MoneyParser::toInt(is_numeric($r->fee) ? (int) $r->fee : (string) $r->fee)
+                : 0;
+        } catch (\InvalidArgumentException) {
+            return $this->fail('Invalid amount or fee', 422);
+        }
+
+        $t = $action->handle([
+            'from_account_id' => $from->id,
+            'to_account_id' => $to->id,
+            'amount' => $amount,
+            'fee' => $fee,
+            'note' => $r->note,
+            'transacted_at' => $r->date ? Carbon::parse($r->date) : today(),
+            'source' => mb_substr($r->user()->currentAccessToken()?->name ?? 'api', 0, 20),
+            'idempotency_key' => $key,
+        ]);
+
+        return $this->ok([
+            'transfer' => [
+                'id' => $t->id,
+                'from' => $from->name,
+                'to' => $to->name,
+                'amount' => $t->amount,
+                'fee' => $t->fee,
+                'date' => $t->transacted_at->toDateString(),
+            ],
+            'balances' => [
+                $from->name => AccountBalance::for($from->fresh()),
+                $to->name => AccountBalance::for($to->fresh()),
+            ],
+        ], 'Transfer recorded', 201);
     }
 
     public function destroy(int $id)

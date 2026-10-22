@@ -39,7 +39,7 @@ class ApiKeys extends Component
                 'max:20',
                 'regex:/^[A-Za-z0-9 _-]+$/',
                 function ($attr, $v, $fail) {
-                    if (in_array(mb_strtolower($v), ['web', 'sync', 'api'], true)) {
+                    if (in_array(mb_strtolower($v), ['web', 'sync', 'api','transfer'], true)) {
                         $fail('Nama itu dicadangkan sistem.');
                     }
                 }

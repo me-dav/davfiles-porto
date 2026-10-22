@@ -28,6 +28,7 @@ Route::prefix('v1')->group(function () {
             Route::get('summary', [FinanceApiController::class, 'summary'])->middleware('ability:finance:read');
             Route::get('transactions', [FinanceApiController::class, 'index'])->middleware('ability:finance:read');
             Route::post('transactions', [FinanceApiController::class, 'store'])->middleware('ability:finance:write');
+            Route::post('transfers', [FinanceApiController::class, 'transfer'])->middleware('ability:finance:write');
             Route::delete('transactions/{id}', [FinanceApiController::class, 'destroy'])->middleware('ability:finance:write');
         });
 });

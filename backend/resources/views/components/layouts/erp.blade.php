@@ -20,8 +20,7 @@
     {{-- Sidebar --}}
     <aside class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full bg-white shadow-[0_0_30px_rgba(236,72,153,0.08)]
               transition-transform lg:translate-x-0" :class="{ 'translate-x-0': open }">
-        <div
-            class="flex h-16 items-center px-6 text-lg font-bold text-black">
+        <div class="flex h-16 items-center px-6 text-lg font-bold text-black">
             {{ config('app.name') }}
         </div>
         <nav class="space-y-6 px-0 py-5 text-[13px]"">
@@ -39,6 +38,8 @@
                         :active="request()->routeIs('finance.transactions')">Transaksi</x-erp.nav-link>
                     <x-erp.nav-link :href="route('finance.accounts')"
                         :active="request()->routeIs('finance.accounts')">Akun</x-erp.nav-link>
+                    <x-erp.nav-link :href="route('finance.transfers')"
+                        :active="request()->routeIs('finance.transfers')">Transfer</x-erp.nav-link>
                     <x-erp.nav-link :href="route('finance.categories')"
                         :active="request()->routeIs('finance.categories')">Kategori</x-erp.nav-link>
                 </div>

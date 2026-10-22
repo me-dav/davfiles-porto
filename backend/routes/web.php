@@ -31,6 +31,7 @@ Route::middleware(['auth', 'active'])->group(function () {
         Route::view('/transactions', 'finance.transactions')->name('transactions');
         Route::view('/accounts', 'finance.accounts')->name('accounts');
         Route::view('/categories', 'finance.categories')->name('categories');
+        Route::view('/transfers', 'finance.transfers')->name('transfers');
     });
 
     Route::middleware('can:manage-content')->group(function () {
