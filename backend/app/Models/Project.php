@@ -18,7 +18,7 @@ class Project extends Model
 
     public function imageUrl(): ?string
     {
-        if (! $this->image_path) {
+        if (!$this->image_path) {
             return null;
         }
 
@@ -37,5 +37,21 @@ class Project extends Model
     public function bodyHtml(): string
     {
         return Str::markdown($this->body ?? '', ['html_input' => 'strip', 'allow_unsafe_links' => false]);
+    }
+
+    public function testimonials()
+    {
+        return $this->hasMany(Testimonial::class);
+    }
+
+    public function testimonialUrl(): ?string
+    {
+        if (!$this->testimonial_token) {
+            return null;
+        }
+        // link harus berdomain dashboard, bukan APP_URL (yang berisi domain API)
+        $base = config('services.dashboard.url') ?: request()->getSchemeAndHttpHost();
+
+        return rtrim($base, '/') . '/testimoni/' . $this->testimonial_token;
     }
 }

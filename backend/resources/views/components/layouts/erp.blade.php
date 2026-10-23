@@ -60,6 +60,15 @@
                         :active="request()->routeIs('admin.projects')">Projects</x-erp.nav-link>
                     <x-erp.nav-link :href="route('admin.journal')"
                         :active="request()->routeIs('admin.journal')">Journal</x-erp.nav-link>
+                        
+                    @php $pendingTs = \App\Models\Testimonial::where('status', 'pending')->count(); @endphp
+                    <x-erp.nav-link :href="route('admin.testimonials')" :active="request()->routeIs('admin.testimonials')">
+                        Testimoni
+                        @if($pendingTs > 0)
+                            <span
+                                class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{{ $pendingTs }}</span>
+                        @endif
+                    </x-erp.nav-link>
                 </div>
             @endcan
         </nav>

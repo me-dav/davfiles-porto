@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Project;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -28,6 +29,7 @@ class ProjectManager extends Component
     public bool $featured = false;
     public $image = null;
     public ?string $currentImage = null;
+    public ?int $linkId = null;
 
     private function guard(): void
     {
@@ -148,6 +150,36 @@ class ProjectManager extends Component
         $p->update(['featured' => !$p->featured]);
     }
 
+    public function openLinkPanel(int $id): void
+    {
+        $this->guard();
+        $p = Project::findOrFail($id);
+
+        if (!$p->testimonial_token) {
+            $p->forceFill(['testimonial_token' => Str::random(40)])->save();
+        }
+        $this->linkId = $p->id;
+    }
+
+    public function closeLinkPanel(): void
+    {
+        $this->linkId = null;
+    }
+
+    public function toggleTestimonial(): void
+    {
+        $this->guard();
+        $p = Project::findOrFail($this->linkId);
+        $p->forceFill(['testimonial_open' => !$p->testimonial_open])->save();
+    }
+
+    public function regenerateToken(): void
+    {
+        $this->guard();
+        $p = Project::findOrFail($this->linkId);
+        $p->forceFill(['testimonial_token' => Str::random(40)])->save();   // link lama langsung mati
+    }
+
     public function delete(int $id): void
     {
         $this->guard();
@@ -162,7 +194,12 @@ class ProjectManager extends Component
     public function render()
     {
         return view('livewire.admin.project-manager', [
-            'projects' => Project::orderByDesc('featured')->orderBy('sort_order')->orderByDesc('year')->paginate(12),
+            'projects' => Project::withCount([
+                'testimonials',
+                'testimonials as pending_count' => fn($q) => $q->where('status', 'pending'),
+            ])
+                ->orderByDesc('featured')->orderBy('sort_order')->orderByDesc('year')->paginate(12),
+            'linkProject' => $this->linkId ? Project::find($this->linkId) : null,
         ]);
     }
 }
