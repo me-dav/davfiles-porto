@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\GoogleAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\TestimonialFormController;
 
 Route::get('/', fn() => redirect()->route(auth()->check() ? 'dashboard' : 'login'));
 
@@ -19,6 +20,12 @@ Route::post('/logout', function (Request $request) {
 
     return redirect()->route('login');
 })->middleware('auth')->name('logout');
+
+Route::get('/testimoni/{token}', [TestimonialFormController::class, 'show'])
+    ->middleware('throttle:testimonial-view')->name('testimonial.form');
+
+Route::post('/testimoni/{token}', [TestimonialFormController::class, 'store'])
+    ->middleware('throttle:testimonial-post')->name('testimonial.store');
 
 Route::middleware('auth')->get('/pending', fn() => view('pending'))->name('pending');
 

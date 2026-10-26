@@ -39,7 +39,12 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT_URI'),
     ],
-    
+
     'dashboard' => ['url' => env('DASHBOARD_URL')],
+
+    'next' => [
+        'url' => env('NEXT_REVALIDATE_URL'),
+        'secret' => env('REVALIDATE_SECRET'),
+    ],
 
 ];

@@ -23,8 +23,16 @@ class Testimonial extends Model
 
     protected static function booted(): void
     {
-        $ping = fn() => NextRevalidate::ping('testimonials');
-        static::saved($ping);
-        static::deleted($ping);
+        // hanya yang aktif, atau yang baru berubah status, yang memengaruhi halaman publik
+        static::saved(function ($m) {
+            if ($m->status === 'active' || $m->wasChanged('status')) {
+                NextRevalidate::ping('testimonials');
+            }
+        });
+        static::deleted(function ($m) {
+            if ($m->status === 'active') {
+                NextRevalidate::ping('testimonials');
+            }
+        });
     }
 }

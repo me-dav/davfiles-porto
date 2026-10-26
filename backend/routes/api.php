@@ -1,7 +1,7 @@
 <?php
 
 // routes/api.php
-use App\Http\Controllers\Api\V1\{FinanceApiController, JournalController, ProjectController, ToolboxController};
+use App\Http\Controllers\Api\V1\{FinanceApiController, JournalController, ProjectController, ToolboxController, TestimonialController};
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -15,6 +15,9 @@ Route::prefix('v1')->group(function () {
     Route::get('journal/{slug}', [JournalController::class, 'show']);
 
     Route::get('toolbox', [ToolboxController::class, 'index']);
+
+    Route::get('testimonials', [TestimonialController::class, 'index'])->middleware('throttle:60,1');
+    Route::get('projects/{slug}/testimonials', [TestimonialController::class, 'forProject'])->middleware('throttle:60,1');
 
     // Contact: ditunda, aktifkan saat controllernya dibuat
     // Route::post('contact', [ContactController::class, 'store'])->middleware('throttle:5,1');
