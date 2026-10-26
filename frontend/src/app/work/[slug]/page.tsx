@@ -6,6 +6,8 @@ import Link from "next/link";
 import Layout from "@/components/layout/Layout";
 import { apiFetch } from "@/lib/api";
 import type { Project } from "@/types/project";
+import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
+import { getProjectTestimonials } from "@/lib/testimonials";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +41,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectDetailPage({ params }: Props) {
   const project = await getProject(params.slug);
+  const { testimonials, summary } = await getProjectTestimonials(params.slug);
+
   if (!project) notFound();
 
   return (
@@ -121,7 +125,7 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {/* ── Body / Case Study ── */}
-      <section className="px-8 md:px-16 py-20 max-w-4xl">
+      <section className="px-8 md:px-16 py-20 max-w-6xl">
         <p className="font-body text-base text-ash leading-relaxed mb-8 text-justify">
           {project.short_description}
         </p>
@@ -136,6 +140,13 @@ export default async function ProjectDetailPage({ params }: Props) {
             Case study coming soon.
           </p>
         )}
+
+        <TestimonialsSection
+          items={testimonials}
+          summary={summary}
+          showProject={false}
+          forceStatic
+        />
       </section>
     </Layout>
   );

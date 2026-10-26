@@ -1,30 +1,34 @@
 // src/app/work/page.tsx
-import type { Metadata } from 'next'
-import Layout from '@/components/layout/Layout'
-import ProjectsGrid from '@/components/sections/ProjectsGrid'
-import { apiFetch } from '@/lib/api'
-import type { ProjectsResponse } from '@/types/project'
+import type { Metadata } from "next";
+import Layout from "@/components/layout/Layout";
+import ProjectsGrid from "@/components/sections/ProjectsGrid";
+import { apiFetch } from "@/lib/api";
+import type { ProjectsResponse } from "@/types/project";
+import TestimonialsSection from "@/components/testimonials/TestimonialsSection";
+import { getTestimonials } from "@/lib/testimonials";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
-export const revalidate = 60
+export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: 'Work',
-  description: 'Full portfolio of projects — web platforms, IoT systems, and editorial tools.',
-}
+  title: "Work",
+  description:
+    "Full portfolio of projects — web platforms, IoT systems, and editorial tools.",
+};
 
 async function getAllProjects() {
   try {
-    const data = await apiFetch<ProjectsResponse>('/projects?per=50')
-    return data.projects
+    const data = await apiFetch<ProjectsResponse>("/projects?per=50");
+    return data.projects;
   } catch {
-    return []
+    return [];
   }
 }
 
 export default async function WorkPage() {
-  const projects = await getAllProjects()
+  const projects = await getAllProjects();
+  const { testimonials, summary } = await getTestimonials();
 
   return (
     <Layout>
@@ -38,6 +42,8 @@ export default async function WorkPage() {
       </div>
 
       <ProjectsGrid projects={projects} variant="grid" />
+
+      <TestimonialsSection items={testimonials} summary={summary} />
     </Layout>
-  )
+  );
 }

@@ -4,6 +4,47 @@
 /* ─── Fonts ──────────────────────────────────────────────────────────────── */
 /* Download from fontshare.com → place in public/fonts/ */
 
+/* ── Testimonial marquee ── */
+@keyframes t-left  { from { transform: translateX(0); }    to { transform: translateX(-50%); } }
+@keyframes t-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+
+.t-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.t-track {
+  display: flex;
+  width: max-content;
+  animation: t-left var(--t-dur, 60s) linear infinite;
+}
+.t-track.t-reverse { animation-name: t-right; }
+.t-item { display: flex; flex: none; width: min(18rem, 78vw); margin-right: 1rem; }
+
+.t-card { max-height: 19rem; }
+.t-clamp {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .t-item { width: 24rem; margin-right: 1.5rem; }
+  .t-card { max-height: 23rem; }
+  .t-clamp { -webkit-line-clamp: 5; }
+}
+
+.t-marquee:hover .t-track,
+.t-marquee:focus-within .t-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .t-marquee { overflow: visible; -webkit-mask-image: none; mask-image: none; padding: 0 2rem; }
+  .t-track { animation: none; width: auto; flex-wrap: wrap; gap: 1.5rem; }
+  .t-item { margin-right: 0; }
+  .t-dup { display: none; }
+}
+
 @font-face {
   font-family: 'canopee';
   src: url('/fonts/Canopee-Variable.woff2') format('woff2');
