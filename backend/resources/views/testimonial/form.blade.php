@@ -86,9 +86,8 @@
         <div>
             <button type="submit"
                 class="f-display w-full rounded-lg bg-slate-900 px-6 py-4 text-lg uppercase tracking-wide text-white transition hover:bg-black disabled:opacity-60">
-                Kirim testimoni
+                Kirim
             </button>
-            <p class="mt-3 text-center text-xs text-slate-400">Testimoni ditinjau dulu sebelum ditampilkan.</p>
         </div>
     </form>
 </x-layouts.testimonial>

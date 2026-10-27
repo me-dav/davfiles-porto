@@ -22,7 +22,7 @@
         }
 
         .f-display {
-            font-family: 'Canopee', Impact, 'Arial Narrow', sans-serif;
+            font-family: 'CabinetGrotesk', Impact, 'Arial Narrow', sans-serif;
         }
 
         .f-body {

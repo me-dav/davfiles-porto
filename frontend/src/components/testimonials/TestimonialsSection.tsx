@@ -59,8 +59,8 @@ export default function TestimonialsSection({
 
   return (
     <section aria-labelledby="testimonials-title" className="py-20">
-      <header className="mb-10 flex flex-wrap items-end justify-between gap-6 px-8 md:px-16">
-        <div>
+      <header className="mb-10 flex flex-wrap items-center justify-between md:gap-6 px-1  md:px-16 ">
+        <div >
           <p className="font-body text-[10px] uppercase tracking-wide2 text-stone">
             Testimonials
           </p>
@@ -72,7 +72,7 @@ export default function TestimonialsSection({
           </h2>
         </div>
         {avg && (
-          <p className="font-display leading-none text-sand">
+          <p className="font-display leading-none text-sand mt-2 md:mt-0">
             <span className="text-5xl">{avg}</span>
             <span className="ml-1 text-sm text-stone">/5</span>
             <span className="font-body mt-2 block text-[10px] uppercase tracking-wide2 text-stone">

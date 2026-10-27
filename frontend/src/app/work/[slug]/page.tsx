@@ -125,18 +125,18 @@ export default async function ProjectDetailPage({ params }: Props) {
       </section>
 
       {/* ── Body / Case Study ── */}
-      <section className="px-8 md:px-16 py-20 max-w-6xl">
-        <p className="font-body text-base text-ash leading-relaxed mb-8 text-justify">
+      <section className="px-8 md:px-16 py-20 max-w-6xl ">
+        <p className="font-body text-base px-8 text-ash leading-relaxed mb-8 text-justify">
           {project.short_description}
         </p>
 
         {project.body_html ? (
           <div
-            className="prose prose-invert max-w-none text-justify"
+            className="prose prose-invert px-8 max-w-none text-justify"
             dangerouslySetInnerHTML={{ __html: project.body_html }}
           />
         ) : (
-          <p className="font-body text-sm text-stone italic">
+          <p className="font-body text-sm px-8 text-stone italic">
             Case study coming soon.
           </p>
         )}
@@ -144,8 +144,7 @@ export default async function ProjectDetailPage({ params }: Props) {
         <TestimonialsSection
           items={testimonials}
           summary={summary}
-          showProject={false}
-          forceStatic
+          
         />
       </section>
     </Layout>

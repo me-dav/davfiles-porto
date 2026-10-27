@@ -29,7 +29,7 @@ function Body({
       <div className="flex items-start justify-between gap-3">
         <span
           aria-hidden="true"
-          className="font-display text-4xl leading-none text-white/30 md:text-5xl"
+          className="font-display text-4xl leading-none text-white/30 md:text-7xl"
         >
           “
         </span>
