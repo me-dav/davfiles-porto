@@ -1,0 +1,92 @@
+name: release
+
+on:
+  push:
+    tags: ['v*']
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.v.outputs.tag }}
+      owner: ${{ steps.v.outputs.owner }}
+    steps:
+      - id: v
+        env:
+          API_URL: ${{ vars.API_URL }}
+          IMAGE_PREFIX: ${{ vars.IMAGE_PREFIX }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          [[ "$TAG" =~ ^v[0-9]+(\.[0-9]+){0,2}$ ]] || { echo "Tag harus berbentuk v7 atau v7.1"; exit 1; }
+          [ -n "$API_URL" ] || { echo "Variable API_URL belum diisi"; exit 1; }
+          [ -n "$IMAGE_PREFIX" ] || { echo "Variable IMAGE_PREFIX belum diisi"; exit 1; }
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "owner=${GITHUB_REPOSITORY_OWNER,,}" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: prepare
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - { name: app,   context: ./backend,  target: app }
+          - { name: nginx, context: ./backend,  target: nginx }
+          - { name: web,   context: ./frontend, target: '' }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          target: ${{ matrix.target }}
+          platforms: linux/amd64
+          push: true
+          provenance: false
+          build-args: ${{ matrix.name == 'web' && format('NEXT_PUBLIC_API_URL={0}', vars.API_URL) || '' }}
+          tags: ghcr.io/${{ needs.prepare.outputs.owner }}/${{ vars.IMAGE_PREFIX }}-${{ matrix.name }}:${{ needs.prepare.outputs.tag }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.name }}
+
+  deploy:
+    needs: [prepare, build]
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Siapkan SSH
+        env:
+          KEY: ${{ secrets.VPS_SSH_KEY }}
+          KNOWN: ${{ secrets.VPS_KNOWN_HOSTS }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$KNOWN" > ~/.ssh/known_hosts
+
+      - name: Deploy ke VPS
+        env:
+          HOST: ${{ secrets.VPS_HOST }}
+          USER_: ${{ secrets.VPS_USER }}
+          PORT: ${{ secrets.VPS_PORT || '22' }}
+          TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          ssh -i ~/.ssh/id_deploy -p "$PORT" \
+            -o StrictHostKeyChecking=yes -o BatchMode=yes -o ServerAliveInterval=15 \
+            "$USER_@$HOST" "$TAG"
