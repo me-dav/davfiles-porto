@@ -99,10 +99,10 @@
         </form>
     </x-erp.card>
 
-    <x-erp.card class="p-0">
+    <x-erp.card flush>
         <div class="border-b border-slate-100 px-5 py-4 text-sm font-medium text-slate-800">Riwayat transfer</div>
         <div class="overflow-x-auto rounded-xl">
-            <table class="w-full text-left text-sm">
+            <x-erp.table>
                 <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                     <tr>
                         <th class="px-4 py-3">Tanggal</th>
@@ -138,7 +138,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
+            </x-erp.table>
         </div>
         <div class="p-4">{{ $rows->links() }}</div>
     </x-erp.card>

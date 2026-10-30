@@ -1,6 +1,6 @@
 {{-- resources/views/livewire/finance/transaction-table.blade.php --}}
 <div>
-    <x-erp.card class="p-0">
+    <x-erp.card flush>
     
         <div class="flex flex-wrap gap-3 border-b border-gray-100 p-4">
             <input wire:model.live.debounce.300ms="search" placeholder="Cari catatan…"
@@ -19,14 +19,14 @@
         </div>
 
         <div class="overflow-hidden rounded-xl">
-            <table class="w-full text-left text-sm">
+            <x-erp.table>
                 <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                     <tr>
                         <th class="px-4 py-3">Tanggal</th>
                         <th class="px-4 py-3">Kategori</th>
                         <th class="px-4 py-3">Catatan</th>
                         <th class="px-4 py-3 text-right">Nominal</th>
-                        <th class="px-4 py-3"></th>
+                        <th class="sticky right-0 bg-slate-800 px-4 py-3 lg:static"></th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -42,7 +42,7 @@
                                 class="px-4 py-3 text-right font-medium tabular-nums {{ $r->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
                                 {{ $r->type === 'income' ? '+' : '−' }} Rp {{ number_format($r->amount, 0, ',', '.') }}
                             </td>
-                            <td class="px-4 py-3 text-right">
+                            <td class="sticky right-0 bg-white px-4 py-3 text-right shadow-[-8px_0_8px_-8px_rgba(15,23,42,0.18)] lg:static lg:shadow-none">
                                 <button wire:click="delete({{ $r->id }})" wire:confirm="Hapus transaksi ini?"
                                     class="text-xs text-gray-400 hover:text-rose-600">Hapus</button>
                                 <button wire:click="edit({{ $r->id }})"
@@ -55,14 +55,14 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
+            </x-erp.table>
         </div>
         <div class="p-4">{{ $rows->links() }}</div>
     </x-erp.card>
 
     @if($editingId)
-        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" wire:key="edit-modal">
-            <div class="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
+        <div class="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/40 p-4" wire:key="edit-modal">
+            <div class="w-full max-w-md my-8 rounded-xl bg-white p-6 shadow-xl">
                 <h3 class="text-base font-semibold">Ubah transaksi</h3>
 
                 <form wire:submit="saveEdit" class="mt-4 space-y-3 text-sm">

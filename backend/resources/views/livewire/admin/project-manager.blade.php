@@ -7,8 +7,8 @@
                 Project</button>
         </div>
 
-        <x-erp.card class="p-0">
-            <table class="w-full text-left text-sm">
+        <x-erp.card flush>
+            <x-erp.table>
                 <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
                     <tr>
                         <th class="px-4 py-3">Project</th>
@@ -57,7 +57,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
+            </x-erp.table>
             <div class="p-4">{{ $projects->links() }}</div>
         </x-erp.card>
 

@@ -20,7 +20,7 @@
         ];
     }
 @endphp
-<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br {{ $bg }} p-5 text-white shadow-lg">
+<div {{ $attributes->class('relative overflow-hidden rounded-2xl bg-gradient-to-br ' . $bg . ' p-4 text-white shadow-lg sm:p-5') }}>
     <div class="relative z-10 flex items-start justify-between gap-2">
         <p class="text-xs font-medium opacity-90">{{ $label }}</p>
         @if($pill)
@@ -29,7 +29,7 @@
                 {{ $pill['text'] }}</span>
         @endif
     </div>
-    <p class="mt-6 text-2xl font-bold tabular-nums">{{ $value }}</p>
+    <p class="mt-3 break-words text-xl font-bold tabular-nums sm:mt-6 sm:text-2xl">{{ $value }}</p>
     @if($sub)
     <p class="mt-1 text-[11px] opacity-80">{{ $sub }}</p>@endif
     <div class="pointer-events-none absolute -right-6 -top-6 h-24 w-24 rounded-full bg-white/10"></div>

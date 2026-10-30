@@ -36,8 +36,8 @@
         <p class="mt-3 text-sm text-rose-600">{{ $message }}</p> @enderror
     </x-erp.card>
 
-    <x-erp.card class="p-0">
-        <table class="w-full text-left text-sm">
+    <x-erp.card flush>
+        <x-erp.table>
             <thead class="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
                 <tr>
                     <th class="px-4 py-3">Akun</th>
@@ -86,7 +86,7 @@
                     </tr>
                 @endforeach
             </tbody>
-        </table>
+        </x-erp.table>
     </x-erp.card>
     @if($syncAccount)
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" wire:key="sync-modal">

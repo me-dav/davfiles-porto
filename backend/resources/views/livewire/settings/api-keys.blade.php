@@ -60,9 +60,9 @@
         @endif
     </x-erp.card>
 
-    <x-erp.card class="p-0">
+    <x-erp.card flush>
         <div class="overflow-x-auto rounded-xl">
-            <table class="w-full text-left text-sm">
+            <x-erp.table>
                 <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                     <tr>
                         <th class="px-4 py-3">Nama</th>
@@ -97,7 +97,7 @@
                         </tr>
                     @endforelse
                 </tbody>
-            </table>
+            </x-erp.table>
         </div>
     </x-erp.card>
 </div>

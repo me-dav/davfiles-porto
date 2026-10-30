@@ -21,7 +21,7 @@
   </div>
 @else
   <div class="table-wrap">
-    <table>
+    <x-erp.table>
       <thead>
         <tr>
           <th style="width:38%">Title</th>
@@ -63,7 +63,7 @@
           </tr>
         @endforeach
       </tbody>
-    </table>
+    </x-erp.table>
   </div>
 
   @if ($entries->hasPages())

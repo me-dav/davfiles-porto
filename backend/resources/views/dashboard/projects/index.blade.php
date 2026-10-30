@@ -22,7 +22,7 @@
   </div>
 @else
   <div class="table-wrap">
-    <table>
+    <x-erp.table>
       <thead>
         <tr>
           <th style="width:35%">Name</th>
@@ -71,7 +71,7 @@
           </tr>
         @endforeach
       </tbody>
-    </table>
+    </x-erp.table>
   </div>
 
   {{-- Pagination --}}
