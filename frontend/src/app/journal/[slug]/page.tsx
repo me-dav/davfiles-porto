@@ -46,6 +46,8 @@ export default async function JournalEntryPage({ params }: Props) {
       }).format(new Date(entry.published_at))
     : null;
 
+  const gallery = entry.gallery ?? [];
+
   return (
     <Layout heroPage>
       {/* ── Hero ── */}
@@ -102,17 +104,50 @@ export default async function JournalEntryPage({ params }: Props) {
       </section>
 
       {/* ── Body ── */}
-      <section className="px-8 md:px-16 py-20 max-w-4xl">
-        {entry.body_html ? (
-          <div
-            className="prose prose-invert max-w-none text-justify"
-            dangerouslySetInnerHTML={{ __html: entry.body_html }}
-          />
-        ) : (
-          <p className="font-body text-stone italic text-sm">
-            Content coming soon.
-          </p>
-        )}
+      <section className="px-8 md:px-16 py-20">
+        <div
+          className={
+            gallery.length > 0
+              ? "max-w-6xl grid gap-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]"
+              : "max-w-4xl"
+          }
+        >
+          {/* kiri: tulisan */}
+          <div>
+            {entry.body_html ? (
+              <div
+                className="prose prose-invert max-w-none text-justify"
+                dangerouslySetInnerHTML={{ __html: entry.body_html }}
+              />
+            ) : (
+              <p className="font-body text-stone italic text-sm">
+                Content coming soon.
+              </p>
+            )}
+          </div>
+
+          {/* kanan: foto bertumpuk, hanya desktop */}
+          {gallery.length > 0 && (
+            <aside
+              aria-label="Photos"
+              className="hidden flex-col gap-10 lg:flex justify-around"
+            >
+              {gallery.map((src, i) => (
+                <figure key={src} className="m-0">
+                  <Image
+                    src={src}
+                    alt={`${entry.title}, photo ${i + 1}`}
+                    width={0}
+                    height={0}
+                    sizes="22rem"
+                    style={{ width: "100%", height: "auto", filter: "brightness(0.8) saturate(0.8)" }}
+                    className="border border-white/15"
+                  />
+                </figure>
+              ))}
+            </aside>
+          )}
+        </div>
       </section>
     </Layout>
   );

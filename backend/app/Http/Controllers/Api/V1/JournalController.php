@@ -52,7 +52,11 @@ class JournalController extends Controller
         return $this->ok([
             'entry' => array_merge(
                 (new JournalEntryResource($e))->resolve(),
-                ['body_markdown' => $e->body, 'body_html' => $e->bodyHtml()],
+                [
+                    'body_markdown' => $e->body,
+                    'body_html' => $e->bodyHtml(),
+                    'gallery' => $e->galleryUrls(),
+                ],
             ),
         ], 'Entry fetched');
     }

@@ -14,16 +14,23 @@ class JournalEntry extends Model
     use HasUniqueSlug, SoftDeletes;
 
     protected $guarded = [];
-    protected $casts = ['tags' => 'array', 'published_at' => 'datetime'];
+    protected $casts = ['tags' => 'array', 'gallery' => 'array', 'published_at' => 'datetime'];
 
     public function scopePublished($q)
     {
         return $q->where('status', 'published')->where('published_at', '<=', now());
     }
 
+    public function galleryUrls(): array
+    {
+        return collect($this->gallery ?? [])
+            ->map(fn($p) => Storage::disk('public')->url($p))
+            ->all();
+    }
+
     public function imageUrl(): ?string
     {
-        if (! $this->image_path) {
+        if (!$this->image_path) {
             return null;
         }
 

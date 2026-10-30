@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
+use Illuminate\Validation\ValidationException;
 
 class JournalManager extends Component
 {
@@ -24,8 +25,13 @@ class JournalManager extends Component
     public string $status = 'draft';
     public $image = null;
     public ?string $currentImage = null;
-
     public string $filterStatus = '';
+    public const MAX_PHOTOS = 8;
+
+    public array $gallery = [];   // path yang sudah tersimpan
+    public array $queued = [];    // upload baru, belum disimpan
+    public array $batch = [];     // penampung sementara dari input file
+    public int $inputKey = 0;
 
     private function guard(): void
     {
@@ -63,6 +69,8 @@ class JournalManager extends Component
         $this->image = null;
         $this->resetValidation();
         $this->showForm = true;
+        $this->gallery = $e->gallery ?? [];
+        $this->queued = [];
     }
 
     public function cancel(): void
@@ -73,7 +81,7 @@ class JournalManager extends Component
 
     private function resetForm(): void
     {
-        $this->reset('editingId', 'title', 'excerpt', 'body', 'tagsText', 'image', 'currentImage');
+        $this->reset('editingId', 'title', 'excerpt', 'body', 'tagsText', 'image', 'currentImage', 'gallery', 'queued', 'batch');
         $this->type = 'exploration';
         $this->status = 'draft';
         $this->resetValidation();
@@ -105,6 +113,18 @@ class JournalManager extends Component
             'status' => $this->status,
         ];
 
+        // public property bisa dimanipulasi dari browser: hanya terima path yang memang milik entri ini
+        $old = $entry->exists ? ($entry->gallery ?? []) : [];
+        $kept = array_values(array_intersect($this->gallery, $old));
+
+        if (count($kept) + count($this->queued) > self::MAX_PHOTOS) {
+            $this->addError('batch', 'Maksimal ' . self::MAX_PHOTOS . ' foto per entri.');
+            return;
+        }
+
+        $stored = array_map(fn($f) => $f->store('journal/gallery', 'public'), $this->queued);
+        $data['gallery'] = array_merge($kept, $stored);
+
         // published_at diisi sekali, saat pertama kali dipublish
         if ($this->status === 'published' && !$entry->published_at) {
             $data['published_at'] = now();
@@ -123,6 +143,10 @@ class JournalManager extends Component
 
         $entry->fill($data)->save();
         $this->cancel();
+
+        foreach (array_diff($old, $kept) as $path) {
+            Storage::disk('public')->delete($path);
+        }
     }
 
     public function togglePublish(int $id): void
@@ -136,6 +160,45 @@ class JournalManager extends Component
         ]);
     }
 
+    public function updatedBatch(): void
+    {
+        try {
+            $this->validate(['batch.*' => 'image|max:4096'], [
+                'batch.*.image' => 'Berkas harus berupa gambar.',
+                'batch.*.max' => 'Ukuran foto maksimal 4 MB.',
+            ]);
+        } catch (ValidationException $e) {
+            $this->reset('batch');
+            $this->inputKey++;
+            throw $e;
+        }
+
+        $room = self::MAX_PHOTOS - count($this->gallery) - count($this->queued);
+
+        foreach (array_slice($this->batch, 0, max($room, 0)) as $file) {
+            $this->queued[] = $file;
+        }
+
+        if (count($this->batch) > $room) {
+            $this->addError('batch', 'Maksimal ' . self::MAX_PHOTOS . ' foto per entri. Sebagian foto tidak ditambahkan.');
+        }
+
+        $this->reset('batch');
+        $this->inputKey++;
+    }
+
+    public function removeQueued(int $i): void
+    {
+        unset($this->queued[$i]);
+        $this->queued = array_values($this->queued);
+    }
+
+    public function removeSaved(int $i): void
+    {
+        unset($this->gallery[$i]);
+        $this->gallery = array_values($this->gallery);
+    }
+
     public function delete(int $id): void
     {
         $this->guard();
@@ -143,6 +206,9 @@ class JournalManager extends Component
 
         if ($p->image_path) {
             Storage::disk('public')->delete($p->image_path);
+        }
+        foreach ($e->gallery ?? [] as $path) {
+            Storage::disk('public')->delete($path);
         }
         $p->forceDelete();
     }

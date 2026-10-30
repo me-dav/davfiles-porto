@@ -27,7 +27,8 @@
                     <tr wire:key="je-{{ $e->id }}">
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
-                                @if($e->imageUrl())<img src="{{ $e->imageUrl() }}" class="h-10 w-14 rounded object-cover" alt="">@endif
+                                @if($e->imageUrl())<img src="{{ $e->imageUrl() }}" class="h-10 w-14 rounded object-cover"
+                                alt="">@endif
                                 <div>
                                     <p class="font-medium">{{ $e->title }}</p>
                                     <p class="text-xs text-gray-500">/{{ $e->slug }}</p>
@@ -105,6 +106,52 @@
                         @elseif($currentImage)<img
                             src="{{ str_starts_with($currentImage, 'http://') || str_starts_with($currentImage, 'https://') ? $currentImage : \Illuminate\Support\Facades\Storage::disk('public')->url($currentImage) }}"
                         class="mt-2 h-24 rounded" alt="">@endif
+                    </div>
+
+                    @php $totalPhotos = count($gallery) + count($queued); @endphp
+                    <div>
+                        <div class="flex items-center justify-between gap-3">
+                            <label class="text-xs text-gray-500">
+                                Foto samping (tampil di desktop saja, maks 4 MB per foto)
+                            </label>
+                            <span
+                                class="text-xs tabular-nums text-gray-400">{{ $totalPhotos }}/{{ \App\Livewire\Admin\JournalManager::MAX_PHOTOS }}</span>
+                        </div>
+
+                        @if($totalPhotos > 0)
+                            <div class="mt-2 grid grid-cols-4 gap-2">
+                                @foreach($gallery as $i => $path)
+                                    <div wire:key="g-{{ md5($path) }}" class="relative">
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($path) }}" alt=""
+                                            class="h-20 w-full rounded object-cover">
+                                        <button type="button" wire:click="removeSaved({{ $i }})" aria-label="Hapus foto"
+                                            class="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-[10px] text-white hover:bg-rose-600">✕</button>
+                                    </div>
+                                @endforeach
+
+                                @foreach($queued as $i => $file)
+                                    <div wire:key="q-{{ $i }}-{{ $file->getFilename() }}" class="relative">
+                                        <img src="{{ $file->temporaryUrl() }}" alt=""
+                                            class="h-20 w-full rounded object-cover ring-2 ring-blue-500">
+                                        <span
+                                            class="absolute bottom-1 left-1 rounded bg-blue-600 px-1.5 text-[9px] font-medium text-white">baru</span>
+                                        <button type="button" wire:click="removeQueued({{ $i }})" aria-label="Batalkan foto"
+                                            class="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-[10px] text-white hover:bg-rose-600">✕</button>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        <input wire:key="photo-input-{{ $inputKey }}" type="file" wire:model="batch" multiple
+                            accept="image/*" @disabled($totalPhotos >= \App\Livewire\Admin\JournalManager::MAX_PHOTOS)
+                            class="mt-2 block w-full text-sm disabled:opacity-50">
+                        <div wire:loading wire:target="batch" class="mt-1 text-xs text-gray-500">Mengunggah…</div>
+                        @error('batch')
+                        <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+                        @error('batch.*')
+                        <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
+                        <p class="mt-1 text-xs text-gray-400">Pilih satu atau beberapa foto, dan tambahkan lagi kapan saja.
+                            Urutan di sini adalah urutan dari atas ke bawah di halaman.</p>
                     </div>
 
                     <div>

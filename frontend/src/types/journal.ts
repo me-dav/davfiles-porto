@@ -18,6 +18,7 @@ export interface JournalEntry {
   tags: string[];
   status: "draft" | "published";
   published_at: string;
+  gallery?: string[];
 }
 
 export interface JournalResponse {
