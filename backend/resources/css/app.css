@@ -10,3 +10,6 @@
   input[class]:not([type="checkbox"]):not([type="radio"]):not([type="file"]):not([type="range"]),
   select[class], textarea[class] { font-size: 16px !important; }
 }
+
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

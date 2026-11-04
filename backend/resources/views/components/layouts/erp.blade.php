@@ -49,6 +49,8 @@
                         :active="request()->routeIs('finance.transfers')">Transfer</x-erp.nav-link>
                     <x-erp.nav-link :href="route('finance.categories')"
                         :active="request()->routeIs('finance.categories')">Kategori</x-erp.nav-link>
+                    <x-erp.nav-link :href="route('finance.budgets')"
+                        :active="request()->routeIs('finance.budgets')">Budget</x-erp.nav-link>
                 </div>
             @endif
 
@@ -134,8 +136,9 @@
     </div>
 
     @if(auth()->user()->hasModule('finance') && !request()->routeIs('finance.transactions'))
-        <a href="{{ route('finance.transactions') }}" aria-label="Tambah transaksi" class="fixed bottom-4 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full
-                  bg-gradient-to-br from-blue-500 to-sky-500 text-3xl leading-none text-white shadow-xl lg:hidden">+</a>
+        <a href="{{ route('finance.transactions') }}" aria-label="Tambah transaksi"
+            class="fixed bottom-4 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full
+                      bg-gradient-to-br from-blue-500 to-sky-500 text-3xl leading-none text-white shadow-xl lg:hidden">+</a>
     @endif
 </body>
 
