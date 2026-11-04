@@ -16,7 +16,8 @@
     {{-- Filter --}}
     <x-erp.card>
         <div class="-mx-1 overflow-x-auto px-1 pb-1">
-            <div class="flex justify-between md:justify-start gap-10 whitespace-nowrap text-[11px] font-medium uppercase tracking-wider rounded-lg border border-gray-200 p-0.5">
+            <div
+                class="flex justify-between md:justify-start gap-10 whitespace-nowrap text-[11px] font-medium uppercase tracking-wider rounded-lg border border-gray-200 p-0.5">
                 <button wire:click="setPreset('week')" class="rounded-md px-3 py-1.5 {{ $btn($preset === 'week') }}">7
                     Hari</button>
                 <button wire:click="setPreset('month')"
@@ -64,6 +65,10 @@
                 :good-when-up="false" :sub="'Sebelumnya: ' . $rp($prevTotals['expense'])" />
 
             <x-erp.stat color="blue" label="Selisih" class="col-span-2 sm:col-span-1" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])" :delta="$deltas['net']" :good-when-up="true" :sub="'Sebelumnya: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net'])" />
+            <div class="col-span-3">
+                <livewire:finance.budget-strip />
+            </div>
+
         </div>
     </div>
 
@@ -81,7 +86,8 @@
                 <div>
                     <p class="text-sm font-medium text-slate-800">Dashboard</p>
                     <p class="text-xs text-slate-400">{{ $rangeLabel }}</p>
-                    <p class="mt-3 md:mt-6 text-3xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['income']) }}</p>
+                    <p class="mt-3 md:mt-6 text-3xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['income']) }}
+                    </p>
                     <p class="text-xs text-slate-400">Pemasukan periode ini</p>
                     <p class="mt-4 text-2xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['expense']) }}</p>
                     <p class="text-xs text-slate-400">Pengeluaran periode ini</p>
@@ -107,7 +113,7 @@
                     <li class="flex items-center gap-3">
                         <span
                             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white
-                                                                                            {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
+                                                                                                                {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-[13px] font-medium text-slate-800">{{ $t->category->name }}</p>
                             <p class="truncate text-xs text-slate-400 max-w-xs lg:max-w-full">{{ $t->note ?: '-' }} ·
