@@ -101,7 +101,7 @@
 
     <x-erp.card flush>
         <div class="border-b border-slate-100 px-5 py-4 text-sm font-medium text-slate-800">Riwayat transfer</div>
-        <div class="overflow-x-auto rounded-xl">
+        <div class="overflow-x-auto rounded-xl p-4">
             <x-erp.table>
                 <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                     <tr>

@@ -36,7 +36,7 @@
             <div class="absolute transition-all duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none"
                 :style="cardStyle({{ $i }})">
                 <div
-                    class="flex h-[132px] flex-col rounded-2xl bg-gradient-to-br {{ $grad }} text-white shadow-lg ring-1 ring-white/10">
+                    class="flex h-[132px] md:h-[162px] flex-col rounded-2xl bg-gradient-to-br {{ $grad }} text-white shadow-lg ring-1 ring-white/10">
                     <div
                         class="flex h-4 shrink-0 items-center justify-between px-4 text-[10px] font-medium uppercase tracking-wider opacity-90">
                         <span class="truncate">{{ $it['name'] }}</span>
@@ -51,7 +51,7 @@
     </div>
 
     @if($n > 1)
-        <div x-show="!open" class="mt-3 flex justify-center gap-1.5">
+        <div x-show="!open" class="mt-3 md:mt-10 flex justify-center gap-1.5">
             @foreach($items as $i => $it)
                 <button type="button" @click="goTo({{ $i }})" aria-label="Tampilkan {{ $it['name'] }}"
                     :class="order[0] === {{ $i }} ? 'w-4 bg-blue-600' : 'w-1.5 bg-slate-300'"

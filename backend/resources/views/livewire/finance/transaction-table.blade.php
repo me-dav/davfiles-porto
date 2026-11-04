@@ -18,7 +18,7 @@
             </select>
         </div>
 
-        <div class="overflow-hidden rounded-xl">
+        <div class="p-4">
             <x-erp.table>
                 <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                     <tr>

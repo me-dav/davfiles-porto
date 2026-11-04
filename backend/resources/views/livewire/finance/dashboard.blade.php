@@ -9,40 +9,58 @@
         $cls = $good ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700';
         return '<span class="ml-2 rounded px-1.5 py-0.5 text-xs font-medium ' . $cls . '">' . ($p >= 0 ? '▲' : '▼') . ' ' . abs($p) . '%</span>';
     };
-    $btn = fn($on) => $on ? 'bg-blue-500 text-white' : 'text-gray-600 hover:bg-gray-100';
+    $btn = fn($on) => $on ? 'underline decoration-purple-500 decoration-4 underline-offset-4 text-black' : 'text-gray-400 hover:bg-gray-100';
+    $btndonut = fn($on) => $on ? 'bg-blue-500 text-white' : 'text-gray-500 hover:bg-gray-100';
 @endphp
 
 <div class="space-y-4">
-    {{-- Filter --}}
-    <x-erp.card>
-        <div class="-mx-1 overflow-x-auto px-1 pb-1">
+
+    {{-- Grafik (wire:ignore: di-update lewat event, bukan re-render) --}}
+    <div x-data="financeCharts(@js($chart))" x-on:charts-updated.window="update($event.detail.chart)"
+        class="grid gap-5 lg:grid-cols-3">
+
+        <x-erp.card class="w-fit md:w-full lg:col-span-2">
             <div
-                class="flex justify-between md:justify-start gap-10 whitespace-nowrap text-[11px] font-medium uppercase tracking-wider rounded-lg border border-gray-200 p-0.5">
-                <button wire:click="setPreset('week')" class="rounded-md px-3 py-1.5 {{ $btn($preset === 'week') }}">7
-                    Hari</button>
+                class="flex justify-center gap-10 whitespace-nowrap text-[12px] font-medium uppercase tracking-wider mb-2">
+                <button wire:click="setPreset('week')"
+                    class="rounded-md px-3 py-1.5 {{ $btn($preset === 'week') }}">WEEKLY</button>
                 <button wire:click="setPreset('month')"
-                    class="rounded-md px-3 py-1.5 {{ $btn($preset === 'month') }}">Bulan ini</button>
+                    class="rounded-md px-3 py-1.5 {{ $btn($preset === 'month') }}">MONTHLY</button>
                 <button wire:click="setPreset('3months')"
-                    class="rounded-md px-3 py-1.5 {{ $btn($preset === '3months') }}">3 Bulan</button>
+                    class="rounded-md px-3 py-1.5 {{ $btn($preset === '3months') }}">3 MONTHS</button>
             </div>
-
-            <div class="mt-4 grid grid-cols-2 gap-2 sm:flex sm:items-center">
-                <input type="date" wire:model.live="from" class="w-full rounded-lg border-gray-300 text-sm">
-                <input type="date" wire:model.live="to" class="w-full rounded-lg border-gray-300 text-sm">
+            <div class="mt-4 grid grid-cols-2 gap-2 sm:flex sm:items-center mb-4">
+                <input type="date" wire:model.live="from" class="w-full rounded-lg border-none bg-gray-100 text-sm">
+                <input type="date" wire:model.live="to" class="w-full rounded-lg border-none bg-gray-100 text-sm">
+                <div class="inline-flex rounded-lg border bg-gray-100 border-none p-0.5 text-sm">
+                    <button wire:click="$set('donutType','expense')"
+                        class="rounded-md px-3 py-1.5 {{ $btndonut($donutType === 'expense') }}">Keluar</button>
+                    <button wire:click="$set('donutType','income')"
+                        class="rounded-md px-3 py-1.5 {{ $btndonut($donutType === 'income') }}">Masuk</button>
+                </div>
             </div>
+            <div class="grid gap-4 md:grid-cols-[200px_1fr] md:gap-6">
+                {{-- angka: BOLEH ikut re-render --}}
+                <div>
+                    <p class="text-sm font-medium text-slate-800">Dashboard</p>
+                    <p class="mt-3 text-xs text-slate-500">Perbandingan Periode: {{ $rangeLabel }} :
+                        {{ $prevLabel }}
+                    </p>
+                    <p class="mt-3 md:mt-6 text-3xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['income']) }}
+                    </p>
+                    <p class="text-xs text-slate-400">Pemasukan periode ini</p>
+                    <p class="mt-4 text-2xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['expense']) }}</p>
+                    <p class="text-xs text-slate-400">Pengeluaran periode ini</p>
+                    @if($insight)
+                        <p class="text-sm text-gray-600 mt-4">💡 {{ $insight }}</p>
+                    @endif
+                </div>
 
-            <div class="inline-flex rounded-lg border border-gray-200 p-0.5 text-sm mt-2">
-                <button wire:click="$set('donutType','expense')"
-                    class="rounded-md px-3 py-1.5 {{ $btn($donutType === 'expense') }}">Donut: Keluar</button>
-                <button wire:click="$set('donutType','income')"
-                    class="rounded-md px-3 py-1.5 {{ $btn($donutType === 'income') }}">Masuk</button>
+                {{-- canvas: JANGAN di-render ulang --}}
+                <div wire:ignore class="h-52 sm:h-64"><canvas x-ref="bar"></canvas></div>
             </div>
-        </div>
-        <p class="mt-3 text-xs text-slate-500">Periode: {{ $rangeLabel }} · dibandingkan dengan {{ $prevLabel }}</p>
-    </x-erp.card>
+        </x-erp.card>
 
-    {{-- Kartu --}}
-    <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,340px)_1fr]">
         <x-erp.card>
             <div class="mb-5 flex items-center justify-between">
                 <h3 class="text-sm font-semibold text-slate-800">
@@ -55,6 +73,17 @@
             </div>
 
             <x-erp.balance-stack :total="$balance" :cards="$accountCards" />
+        </x-erp.card>
+
+
+    </div>
+
+    {{-- Kartu --}}
+    <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,340px)_1fr]">
+        <x-erp.card>
+            <p class="text-sm font-medium text-slate-800">Kategori</p>
+            <div wire:ignore class="mt-3 h-48 sm:h-56"><canvas x-ref="donut"></canvas></div>
+            
         </x-erp.card>
 
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
@@ -72,38 +101,6 @@
         </div>
     </div>
 
-    @if($insight)
-        <p class="text-sm text-gray-600">💡 {{ $insight }}</p>
-    @endif
-
-    {{-- Grafik (wire:ignore: di-update lewat event, bukan re-render) --}}
-    <div x-data="financeCharts(@js($chart))" x-on:charts-updated.window="update($event.detail.chart)"
-        class="grid gap-5 lg:grid-cols-3">
-
-        <x-erp.card class="lg:col-span-2">
-            <div class="grid gap-4 md:grid-cols-[200px_1fr] md:gap-6">
-                {{-- angka: BOLEH ikut re-render --}}
-                <div>
-                    <p class="text-sm font-medium text-slate-800">Dashboard</p>
-                    <p class="text-xs text-slate-400">{{ $rangeLabel }}</p>
-                    <p class="mt-3 md:mt-6 text-3xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['income']) }}
-                    </p>
-                    <p class="text-xs text-slate-400">Pemasukan periode ini</p>
-                    <p class="mt-4 text-2xl font-bold text-slate-900 tabular-nums">{{ $rp($totals['expense']) }}</p>
-                    <p class="text-xs text-slate-400">Pengeluaran periode ini</p>
-                </div>
-
-                {{-- canvas: JANGAN di-render ulang --}}
-                <div wire:ignore class="h-52 sm:h-64"><canvas x-ref="bar"></canvas></div>
-            </div>
-        </x-erp.card>
-
-        <x-erp.card>
-            <p class="text-sm font-medium text-slate-800">Kategori</p>
-            <div wire:ignore class="mt-3 h-48 sm:h-56"><canvas x-ref="donut"></canvas></div>
-        </x-erp.card>
-    </div>
-
     {{-- Tabel kategori --}}
     <div class="grid gap-5 lg:grid-cols-[1fr_2fr]">
         <x-erp.card class="">
@@ -113,7 +110,7 @@
                     <li class="flex items-center gap-3">
                         <span
                             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white
-                                                                                                                {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
+                                                                                                                                                        {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-[13px] font-medium text-slate-800">{{ $t->category->name }}</p>
                             <p class="truncate text-xs text-slate-400 max-w-xs lg:max-w-full">{{ $t->note ?: '-' }} ·
@@ -128,7 +125,7 @@
             </ul>
         </x-erp.card>
 
-        <x-erp.card flush>
+        <x-erp.card flush class="w-fit md:w-full">
 
             <x-erp.table>
                 <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
