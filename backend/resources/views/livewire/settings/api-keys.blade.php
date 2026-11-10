@@ -15,11 +15,11 @@
         <form wire:submit="create" class="mt-5 flex flex-col gap-3 sm:flex-row sm:items-start">
             <div class="flex-1">
                 <input wire:model="name" maxlength="20" placeholder="Nama key (mis. hermes)"
-                    class="w-full rounded-lg border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                    class="w-full rounded-lg border-slate-300 text-sm focus:border-violet-500 focus:ring-violet-500">
                 @error('name')
                 <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
-            <button class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">Buat
+            <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">Buat
                 key</button>
         </form>
 
@@ -48,7 +48,7 @@
                     <code x-ref="tok"
                         class="block flex-1 select-all break-all rounded-lg bg-white px-3 py-2 text-xs text-slate-800">{{ $newToken }}</code>
                     <button type="button" @click="copy"
-                        class="shrink-0 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600">
+                        class="shrink-0 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-900">
                         <span x-show="!copied">Salin</span>
                         <span x-show="copied" x-cloak>Tersalin ✓</span>
                     </button>

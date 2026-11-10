@@ -1,7 +1,7 @@
 {{-- resources/views/livewire/finance/transfer-manager.blade.php --}}
 @php
     $rp = fn($n) => ($n < 0 ? '−' : '') . 'Rp ' . number_format(abs($n), 0, ',', '.');
-    $in = 'mt-1 block w-full rounded-lg border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500';
+    $in = 'mt-1 block w-full rounded-lg border-slate-300 text-sm focus:border-violet-500 focus:ring-violet-500';
 @endphp
 <div class="space-y-5">
     @if(session('done'))
@@ -28,7 +28,7 @@
                 </div>
 
                 <button type="button" wire:click="swap" title="Tukar akun asal dan tujuan"
-                    class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600">⇄</button>
+                    class="mx-auto flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition hover:bg-violet-50 hover:text-violet-700">⇄</button>
 
                 <div>
                     <label class="text-sm font-medium text-slate-700">Ke</label>
@@ -94,7 +94,7 @@
 
             <div class="flex justify-end">
                 <button wire:loading.attr="disabled" wire:target="save"
-                    class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">Transfer</button>
+                    class="rounded-lg bg-slate-900 px-5 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-50">Transfer</button>
             </div>
         </form>
     </x-erp.card>

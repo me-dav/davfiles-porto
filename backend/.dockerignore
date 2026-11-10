@@ -11,3 +11,6 @@ storage/framework/cache/*
 storage/framework/sessions/*
 storage/framework/views/*
 tests
+bootstrap/cache/*.php
+public/hot
+node_modules

@@ -1,6 +1,6 @@
 {{-- resources/views/livewire/admin/testimonial-manager.blade.php --}}
 @php
-    $tab = fn($on) => $on ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-600';
+    $tab = fn($on) => $on ? 'border-violet-600 text-violet-700' : 'border-transparent text-slate-400 hover:text-slate-600';
     $labels = ['pending' => 'Draft', 'active' => 'Aktif', 'rejected' => 'Ditolak'];
 @endphp
 <div class="space-y-4">
@@ -37,7 +37,7 @@
                             class="text-sm font-normal text-slate-400">/5</span></span>
                     <span class="flex gap-0.5">
                         @for($i = 1; $i <= 5; $i++)
-                            <span class="h-1.5 w-4 rounded-full {{ $i <= $r->rating ? 'bg-blue-600' : 'bg-slate-200' }}"></span>
+                            <span class="h-1.5 w-4 rounded-full {{ $i <= $r->rating ? 'bg-violet-600' : 'bg-slate-200' }}"></span>
                         @endfor
                     </span>
                 </div>

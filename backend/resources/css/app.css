@@ -13,3 +13,26 @@
 
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
+
+.bs-notch {
+  clip-path: polygon(
+    0 0,
+    calc(50% - 72px) 0,
+    calc(50% - 68px) 1px,
+    calc(50% - 63px) 3.5px,
+    calc(50% - 57px) 7.5px,
+    calc(50% - 51px) 11px,
+    calc(50% - 46px) 13px,
+    calc(50% - 42px) 14px,
+    calc(50% + 42px) 14px,
+    calc(50% + 46px) 13px,
+    calc(50% + 51px) 11px,
+    calc(50% + 57px) 7.5px,
+    calc(50% + 63px) 3.5px,
+    calc(50% + 68px) 1px,
+    calc(50% + 72px) 0,
+    100% 0,
+    100% 100%,
+    0 100%
+  );
+}

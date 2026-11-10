@@ -1,11 +1,11 @@
-@props(['label', 'value', 'sub' => null, 'color' => 'blue', 'delta' => null, 'goodWhenUp' => true])
+@props(['label', 'value', 'sub' => null, 'color' => 'ink', 'delta' => null, 'goodWhenUp' => true])
 @php
+    // Palet premium: violet = Masuk, gold = Keluar, ink = netral (Selisih/total)
     $bg = [
-        'pink' => 'from-pink-500 to-rose-400',
-        'purple' => 'from-purple-500 to-indigo-500',
-        'orange' => 'from-amber-400 to-orange-500',
-        'blue' => 'from-sky-400 to-blue-500',
-    ][$color];
+        'violet' => 'from-violet-600 to-violet-900',
+        'gold' => 'from-amber-600 to-amber-800',
+        'ink' => 'from-slate-950 to-slate-700',
+    ][$color] ?? 'from-slate-950 to-slate-700';
 
     $pill = null;
     if ($delta) {

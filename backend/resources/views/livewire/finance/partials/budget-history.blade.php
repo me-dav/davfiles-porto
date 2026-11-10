@@ -74,7 +74,7 @@
                         <td class="px-4 py-3 text-slate-700">
                             {{ $p['label'] }}
                             @unless($p['finished'])<span
-                            class="ml-1 rounded bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">berjalan</span>@endunless
+                            class="ml-1 rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-medium text-violet-800">berjalan</span>@endunless
                         </td>
                         <td class="px-4 py-3 text-right tabular-nums text-slate-500">{{ $rp($p['amount']) }}</td>
                         <td class="px-4 py-3 text-right font-medium tabular-nums">{{ $rp($p['spent']) }}</td>
@@ -108,7 +108,7 @@
                             <span class="tabular-nums text-slate-500">{{ $rp($row['total']) }}</span>
                         </div>
                         <div class="mt-1 h-1.5 overflow-hidden rounded-full bg-slate-100">
-                            <div class="h-full rounded-full bg-blue-500"
+                            <div class="h-full rounded-full bg-violet-600"
                                 style="width: {{ $max > 0 ? round($row['total'] / $max * 100) : 0 }}%"></div>
                         </div>
                     </li>

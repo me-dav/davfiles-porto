@@ -24,7 +24,7 @@
                 @error('opening')
                 <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
             </div>
-            <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+            <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">
                 {{ $editingId ? 'Update' : 'Tambah' }}
             </button>
             @if($editingId)
@@ -54,7 +54,7 @@
                         <td class="px-4 py-3 font-medium">
                             {{ $a->name }}
                             @if($a->is_default)<span
-                            class="ml-1 rounded bg-indigo-50 px-1.5 py-0.5 text-xs text-indigo-700">default</span>@endif
+                            class="ml-1 rounded bg-violet-50 px-1.5 py-0.5 text-xs text-violet-800">default</span>@endif
                             @unless($a->is_active)<span
                             class="ml-1 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">diarsipkan</span>@endunless
                         </td>
@@ -66,18 +66,18 @@
                         </td>
                         <td class="space-x-3 px-4 py-3 text-right text-xs">
                             @if($a->is_active)
-                                <button wire:click="openSync({{ $a->id }})" class="text-blue-600 hover:underline">Sync
+                                <button wire:click="openSync({{ $a->id }})" class="text-violet-700 hover:underline">Sync
                                     saldo</button>
                                 <button wire:click="edit({{ $a->id }})" class="text-gray-500 hover:text-gray-900">Ubah</button>
                                 @unless($a->is_default)
-                                    <button wire:click="makeDefault({{ $a->id }})" class="text-indigo-600 hover:underline">Jadikan
+                                    <button wire:click="makeDefault({{ $a->id }})" class="text-violet-700 hover:underline">Jadikan
                                         default</button>
                                     <button wire:click="archive({{ $a->id }})" wire:confirm="Arsipkan akun ini?"
                                         class="text-gray-400 hover:text-rose-600">Arsipkan</button>
                                 @endunless
                             @else
                                 <button wire:click="restore({{ $a->id }})"
-                                    class="text-blue-600 hover:underline">Aktifkan</button>
+                                    class="text-violet-700 hover:underline">Aktifkan</button>
                                 <button wire:click="delete({{ $a->id }})"
                                     wire:confirm="Hapus akun {{ $a->name }} secara permanen?"
                                     class="text-gray-400 hover:text-rose-600">Hapus</button>
@@ -118,7 +118,7 @@
                                 <b>pengeluaran</b> kategori “{{ \App\Actions\Finance\SyncAccountBalance::LOST }}”.
                             </p>
                         @else
-                            <p class="rounded-lg bg-blue-50 px-3 py-2 text-sm text-blue-700">
+                            <p class="rounded-lg bg-violet-50 px-3 py-2 text-sm text-violet-800">
                                 Selisih +Rp {{ number_format($preview['diff'], 0, ',', '.') }} dicatat sebagai
                                 <b>pemasukan</b> kategori “{{ \App\Actions\Finance\SyncAccountBalance::FOUND }}”.
                             </p>
@@ -129,7 +129,7 @@
                         <button type="button" wire:click="closeSync"
                             class="text-sm text-slate-500 hover:text-slate-800">Batal</button>
                         <button @disabled(!$preview) wire:loading.attr="disabled" wire:target="confirmSync"
-                            class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50">
+                            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-50">
                             Konfirmasi
                         </button>
                     </div>

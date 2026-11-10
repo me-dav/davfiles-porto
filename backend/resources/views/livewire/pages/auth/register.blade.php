@@ -50,7 +50,7 @@ new #[Layout('layouts.guest')]
     </div>
 
     <form wire:submit="register" class="space-y-4">
-        @php $in = 'mt-1 block w-full rounded-lg border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500'; @endphp
+        @php $in = 'mt-1 block w-full rounded-lg border-slate-300 text-sm focus:border-violet-500 focus:ring-violet-500'; @endphp
         <div>
             <label class="text-sm font-medium text-slate-700">Nama</label>
             <input wire:model="name" required autocomplete="name" class="{{ $in }}">
@@ -75,11 +75,11 @@ new #[Layout('layouts.guest')]
                 class="{{ $in }}">
         </div>
         <button
-            class="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-700">Daftar</button>
+            class="w-full rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-violet-700">Daftar</button>
     </form>
 
     <p class="mt-6 text-center text-sm text-slate-500">
         Sudah punya akun? <a href="{{ route('login') }}" wire:navigate
-            class="font-medium text-blue-600 hover:underline">Masuk</a>
+            class="font-medium text-violet-700 hover:underline">Masuk</a>
     </p>
 </div>

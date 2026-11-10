@@ -23,12 +23,12 @@
         class="fixed inset-0 z-[35] bg-slate-900/50 lg:hidden"></div>
 
     {{-- Sidebar --}}
-    <aside id="sidebar" :class="open ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full bg-white shadow-[0_0_30px_rgba(236,72,153,0.08)]
+    <aside id="sidebar" :class="open ? 'translate-x-0' : '-translate-x-full'" class="fixed inset-y-0 left-0 z-40 w-60 -translate-x-full bg-white shadow-[0_0_30px_rgba(15,23,42,0.06)]
               transition-transform lg:translate-x-0" :class="{ 'translate-x-0': open }">
         <div class="flex h-16 shrink-0 items-center justify-between px-6 text-lg font-bold text-black">
             <span>{{ config('app.name') }}</span>
             <button type="button" @click="open = false" aria-label="Tutup menu"
-                class="-mr-2 flex h-9 w-9 items-center justify-center rounded-lg hover:bg-white/15 lg:hidden">✕</button>
+                class="-mr-2 flex h-9 w-9 items-center justify-center rounded-lg hover:bg-slate-100 lg:hidden">✕</button>
         </div>
         <nav @click="if ($event.target.closest('a')) open = false" class="space-y-6 px-0 py-5 text-[13px]">
             <div>
@@ -38,7 +38,7 @@
 
             @if(auth()->user()->hasModule('finance'))
                 <div>
-                    <p class="px-3 pb-2 text-xs font-medium uppercase tracking-wide text-gray-400">Finance</p>
+                    <p class="px-6 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Finance</p>
                     {{-- link Transaksi, Akun, Kategori ditambah di step finance --}}
                     {{-- layouts/erp.blade.php, di bawah judul "Finance" --}}
                     <x-erp.nav-link :href="route('finance.transactions')"
@@ -56,13 +56,13 @@
 
             @can('manage-content')
                 <div>
-                    <p class="px-3 pb-2 text-xs font-medium uppercase tracking-wide text-gray-400">Admin</p>
+                    <p class="px-6 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-400">Admin</p>
                     @php $pending = \App\Models\User::where('status', 'pending')->count(); @endphp
                     <x-erp.nav-link :href="route('admin.users')" :active="request()->routeIs('admin.users')">
                         Users
                         @if($pending > 0)
                             <span
-                                class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{{ $pending }}</span>
+                                class="ml-auto rounded-full bg-violet-600 px-2 py-0.5 text-[11px] font-semibold text-white">{{ $pending }}</span>
                         @endif
                     </x-erp.nav-link>
                     <x-erp.nav-link :href="route('admin.projects')"
@@ -75,7 +75,7 @@
                         Testimoni
                         @if($pendingTs > 0)
                             <span
-                                class="ml-auto rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">{{ $pendingTs }}</span>
+                                class="ml-auto rounded-full bg-violet-600 px-2 py-0.5 text-[11px] font-semibold text-white">{{ $pendingTs }}</span>
                         @endif
                     </x-erp.nav-link>
                 </div>
@@ -106,7 +106,7 @@
                             class="h-8 w-8 rounded-full object-cover">
                     @else
                         <span
-                            class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-sky-500 text-xs font-semibold text-white">{{ $initials }}</span>
+                            class="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-violet-600 to-violet-900 text-xs font-semibold text-white">{{ $initials }}</span>
                     @endif
                     <span class="hidden text-sm font-medium text-slate-700 sm:block">{{ $u->name }}</span>
                     <svg class="h-4 w-4 text-slate-400" viewBox="0 0 20 20" fill="currentColor">
@@ -138,7 +138,7 @@
     @if(auth()->user()->hasModule('finance') && !request()->routeIs('finance.transactions'))
         <a href="{{ route('finance.transactions') }}" aria-label="Tambah transaksi"
             class="fixed bottom-4 right-5 z-30 flex h-14 w-14 items-center justify-center rounded-full
-                      bg-gradient-to-br from-blue-500 to-sky-500 text-3xl leading-none text-white shadow-xl lg:hidden">+</a>
+                      bg-gradient-to-br from-slate-900 to-violet-800 text-3xl leading-none text-white shadow-xl lg:hidden">+</a>
     @endif
 </body>
 

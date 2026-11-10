@@ -1,4 +1,4 @@
-<div class="space-y-3 bg-gradient-to-tl from-purple-500 via-blue-400 to-sky-300 shadow-md px-2 md:px-4 py-2 rounded-lg " x-data="{ by(n) { $refs.rail.scrollBy({ left: n, behavior: 'smooth' }) } }">
+<div class="space-y-3 bg-gradient-to-br from-slate-950 to-slate-700 shadow-md px-2 md:px-4 py-2 rounded-2xl " x-data="{ by(n) { $refs.rail.scrollBy({ left: n, behavior: 'smooth' }) } }">
     <div class="flex items-center justify-between gap-3">
         <h3 class="text-sm font-semibold text-white">
             Budget <sup class="ml-0.5 text-xs font-normal text-slate-100">{{ $total }}</sup>

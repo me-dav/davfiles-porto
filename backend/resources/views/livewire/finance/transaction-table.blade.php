@@ -39,7 +39,7 @@
                                 class="ml-1 rounded bg-gray-100 px-1.5 py-0.5 text-xs text-gray-500">{{ $r->source }}</span>@endif
                             </td>
                             <td
-                                class="px-4 py-3 text-right font-medium tabular-nums {{ $r->type === 'income' ? 'text-emerald-600' : 'text-rose-600' }}">
+                                class="px-4 py-3 text-right font-medium tabular-nums {{ $r->type === 'income' ? 'text-violet-700' : 'text-amber-700' }}">
                                 {{ $r->type === 'income' ? '+' : '−' }} Rp {{ number_format($r->amount, 0, ',', '.') }}
                             </td>
                             <td class="sticky right-0 bg-white px-4 py-3 text-right shadow-[-8px_0_8px_-8px_rgba(15,23,42,0.18)] lg:static lg:shadow-none">
@@ -68,9 +68,9 @@
                 <form wire:submit="saveEdit" class="mt-4 space-y-3 text-sm">
                     <div class="inline-flex rounded-lg border border-gray-200 p-0.5">
                         <button type="button" wire:click="$set('eType','expense')"
-                            class="rounded-md px-3 py-1.5 {{ $eType === 'expense' ? 'bg-rose-50 text-rose-700' : 'text-gray-500' }}">Keluar</button>
+                            class="rounded-md px-3 py-1.5 {{ $eType === 'expense' ? 'bg-amber-50 text-amber-800' : 'text-gray-500' }}">Keluar</button>
                         <button type="button" wire:click="$set('eType','income')"
-                            class="rounded-md px-3 py-1.5 {{ $eType === 'income' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-500' }}">Masuk</button>
+                            class="rounded-md px-3 py-1.5 {{ $eType === 'income' ? 'bg-violet-50 text-violet-800' : 'text-gray-500' }}">Masuk</button>
                     </div>
 
                     <div>
@@ -113,7 +113,7 @@
                         <button type="button" wire:click="cancelEdit"
                             class="text-sm text-gray-500 hover:text-gray-800">Batal</button>
                         <button
-                            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">Simpan</button>
+                            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">Simpan</button>
                     </div>
                 </form>
             </div>

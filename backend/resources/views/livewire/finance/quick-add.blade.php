@@ -3,9 +3,9 @@
     <form wire:submit="save" class="flex flex-col gap-3 lg:flex-row lg:items-start">
         <div class="inline-flex rounded-lg border border-gray-200 p-0.5 text-sm">
             <button type="button" wire:click="$set('type','expense')"
-                class="rounded-md px-3 py-1.5 {{ $type === 'expense' ? 'bg-rose-50 text-rose-700' : 'text-gray-500' }}">Keluar</button>
+                class="rounded-md px-3 py-1.5 {{ $type === 'expense' ? 'bg-amber-50 text-amber-800' : 'text-gray-500' }}">Keluar</button>
             <button type="button" wire:click="$set('type','income')"
-                class="rounded-md px-3 py-1.5 {{ $type === 'income' ? 'bg-emerald-50 text-emerald-700' : 'text-gray-500' }}">Masuk</button>
+                class="rounded-md px-3 py-1.5 {{ $type === 'income' ? 'bg-violet-50 text-violet-800' : 'text-gray-500' }}">Masuk</button>
         </div>
 
         <div>
@@ -46,7 +46,7 @@
         <input wire:model="note" placeholder="Catatan singkat…"
             class="w-full flex-1 rounded-lg border-gray-300 text-sm">
 
-        <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+        <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">
             Simpan
         </button>
     </form>

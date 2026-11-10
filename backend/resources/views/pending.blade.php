@@ -5,6 +5,6 @@
     </p>
     {{-- <form method="POST" action="{{ route('logout') }}" class="mt-6">
         @csrf
-        <button class="text-sm text-indigo-600 hover:underline">Keluar</button>
+        <button class="text-sm text-violet-700 hover:underline">Keluar</button>
     </form> --}}
 </x-guest-layout>

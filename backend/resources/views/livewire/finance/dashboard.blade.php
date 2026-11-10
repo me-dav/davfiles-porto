@@ -9,8 +9,8 @@
         $cls = $good ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700';
         return '<span class="ml-2 rounded px-1.5 py-0.5 text-xs font-medium ' . $cls . '">' . ($p >= 0 ? '▲' : '▼') . ' ' . abs($p) . '%</span>';
     };
-    $btn = fn($on) => $on ? 'underline decoration-purple-500 decoration-4 underline-offset-4 text-black' : 'text-gray-400 hover:bg-gray-100';
-    $btndonut = fn($on) => $on ? 'bg-blue-500 text-white' : 'text-gray-500 hover:bg-gray-100';
+    $btn = fn($on) => $on ? 'underline decoration-violet-600 decoration-4 underline-offset-4 text-black' : 'text-gray-400 hover:bg-gray-100';
+    $btndonut = fn($on) => $on ? 'bg-slate-900 text-white' : 'text-gray-500 hover:bg-gray-100';
 @endphp
 
 <div class="space-y-4">
@@ -67,7 +67,7 @@
                     My cards <sup class="ml-0.5 text-xs font-normal text-slate-400">{{ count($accountCards) }}</sup>
                 </h3>
                 <a href="{{ route('finance.accounts', ['add' => 1]) }}"
-                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-blue-600">
+                    class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1.5 text-xs font-medium text-white transition hover:bg-slate-900">
                     Add <span class="text-sm leading-none">+</span>
                 </a>
             </div>
@@ -82,18 +82,18 @@
     <div class="grid items-start gap-5 lg:grid-cols-[minmax(0,340px)_1fr]">
         <x-erp.card>
             <p class="text-sm font-medium text-slate-800">Kategori</p>
-            <div wire:ignore class="mt-3 h-48 sm:h-56"><canvas x-ref="donut"></canvas></div>
+            <div wire:ignore class="mt-3 h-64 sm:h-72"><canvas x-ref="donut"></canvas></div>
             
         </x-erp.card>
 
         <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
-            <x-erp.stat color="purple" label="Masuk" :value="$rp($totals['income'])" :delta="$deltas['income']"
+            <x-erp.stat color="violet" label="Masuk" :value="$rp($totals['income'])" :delta="$deltas['income']"
                 :good-when-up="true" :sub="'Sebelumnya: ' . $rp($prevTotals['income'])" />
 
-            <x-erp.stat color="orange" label="Keluar" :value="$rp($totals['expense'])" :delta="$deltas['expense']"
+            <x-erp.stat color="gold" label="Keluar" :value="$rp($totals['expense'])" :delta="$deltas['expense']"
                 :good-when-up="false" :sub="'Sebelumnya: ' . $rp($prevTotals['expense'])" />
 
-            <x-erp.stat color="blue" label="Selisih" class="col-span-2 sm:col-span-1" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])" :delta="$deltas['net']" :good-when-up="true" :sub="'Sebelumnya: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net'])" />
+            <x-erp.stat color="ink" label="Selisih" class="col-span-2 sm:col-span-1" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])" :delta="$deltas['net']" :good-when-up="true" :sub="'Sebelumnya: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net'])" />
             <div class="col-span-3">
                 <livewire:finance.budget-strip />
             </div>
@@ -110,7 +110,7 @@
                     <li class="flex items-center gap-3">
                         <span
                             class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white
-                                                                                                                                                        {{ $t->type === 'income' ? 'bg-purple-500' : 'bg-pink-500' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
+                                                                                                                                                        {{ $t->type === 'income' ? 'bg-violet-600' : 'bg-amber-600' }}">{{ $t->type === 'income' ? '+' : '−' }}</span>
                         <div class="min-w-0 flex-1">
                             <p class="truncate text-[13px] font-medium text-slate-800">{{ $t->category->name }}</p>
                             <p class="truncate text-xs text-slate-400 max-w-xs lg:max-w-full">{{ $t->note ?: '-' }} ·

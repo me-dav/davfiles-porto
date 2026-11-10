@@ -3,7 +3,7 @@
     <div class="space-y-4">
         <div class="flex justify-end">
             <button wire:click="create"
-                class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">+
+                class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">+
                 Project</button>
         </div>
 
@@ -35,14 +35,14 @@
                             <td class="px-4 py-3 text-gray-600">{{ $p->year }}</td>
                             <td class="px-4 py-3">
                                 <button wire:click="toggleFeatured({{ $p->id }})"
-                                    class="rounded px-2 py-0.5 text-xs {{ $p->featured ? 'bg-indigo-50 text-indigo-700' : 'bg-gray-100 text-gray-500' }}">
+                                    class="rounded px-2 py-0.5 text-xs {{ $p->featured ? 'bg-violet-50 text-violet-800' : 'bg-gray-100 text-gray-500' }}">
                                     {{ $p->featured ? 'ya' : 'tidak' }}</button>
                             </td>
                             <td class="space-x-3 px-4 py-3 text-right text-xs">
-                                <button wire:click="openLinkPanel({{ $p->id }})" class="text-blue-600 hover:underline">
+                                <button wire:click="openLinkPanel({{ $p->id }})" class="text-violet-700 hover:underline">
                                     Testimoni
                                     @if($p->pending_count)<span
-                                    class="ml-0.5 rounded-full bg-amber-100 px-1.5 text-[10px] font-semibold text-amber-700">{{ $p->pending_count }}</span>@endif
+                                    class="ml-0.5 rounded-full bg-violet-600 px-1.5 text-[10px] font-semibold text-white">{{ $p->pending_count }}</span>@endif
                                 </button>
                                 <button wire:click="edit({{ $p->id }})"
                                     class="text-gray-500 hover:text-gray-900">Ubah</button>
@@ -134,13 +134,13 @@
                         </div>
 
                         <label class="flex items-center gap-2"><input type="checkbox" wire:model="featured"
-                                class="rounded border-gray-300 text-indigo-600"> Tampilkan sebagai featured</label>
+                                class="rounded border-gray-300 text-violet-700"> Tampilkan sebagai featured</label>
 
                         <div class="flex justify-end gap-3 pt-2">
                             <button type="button" wire:click="cancel"
                                 class="text-sm text-gray-500 hover:text-gray-800">Batal</button>
                             <button
-                                class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">Simpan</button>
+                                class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">Simpan</button>
                         </div>
                     </form>
                 </div>
@@ -165,7 +165,7 @@
                     <input x-ref="url" readonly value="{{ $linkProject->testimonialUrl() }}"
                         class="min-w-0 flex-1 rounded-lg border-slate-300 bg-slate-50 text-xs">
                     <button type="button" @click="copy"
-                        class="shrink-0 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600">
+                        class="shrink-0 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-900">
                         <span x-show="!copied">Salin</span><span x-show="copied" x-cloak>Tersalin ✓</span>
                     </button>
                 </div>

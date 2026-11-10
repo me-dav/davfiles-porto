@@ -1,5 +1,5 @@
 {{-- resources/views/livewire/finance/category-manager.blade.php --}}
-@php $btn = fn($on) => $on ? 'bg-indigo-600 text-white' : 'text-gray-600 hover:bg-gray-100'; @endphp
+@php $btn = fn($on) => $on ? 'bg-slate-900 text-white' : 'text-gray-600 hover:bg-gray-100'; @endphp
 <div class="space-y-4">
     <x-erp.card>
         <div class="flex flex-wrap items-start gap-3">
@@ -17,7 +17,7 @@
                     @error('name')
                     <p class="mt-1 text-xs text-rose-600">{{ $message }}</p> @enderror
                 </div>
-                <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
+                <button class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">
                     {{ $editingId ? 'Update' : 'Tambah' }}
                 </button>
                 @if($editingId)

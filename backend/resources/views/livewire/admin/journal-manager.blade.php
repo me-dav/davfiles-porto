@@ -7,7 +7,7 @@
             <option value="published">Published</option>
         </select>
         <button wire:click="create"
-            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">+
+            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">+
             Entri</button>
     </div>
 
@@ -132,9 +132,9 @@
                                 @foreach($queued as $i => $file)
                                     <div wire:key="q-{{ $i }}-{{ $file->getFilename() }}" class="relative">
                                         <img src="{{ $file->temporaryUrl() }}" alt=""
-                                            class="h-20 w-full rounded object-cover ring-2 ring-blue-500">
+                                            class="h-20 w-full rounded object-cover ring-2 ring-violet-500">
                                         <span
-                                            class="absolute bottom-1 left-1 rounded bg-blue-600 px-1.5 text-[9px] font-medium text-white">baru</span>
+                                            class="absolute bottom-1 left-1 rounded bg-slate-900 px-1.5 text-[9px] font-medium text-white">baru</span>
                                         <button type="button" wire:click="removeQueued({{ $i }})" aria-label="Batalkan foto"
                                             class="absolute right-1 top-1 flex h-5 w-5 items-center justify-center rounded-full bg-black/70 text-[10px] text-white hover:bg-rose-600">✕</button>
                                     </div>
@@ -165,7 +165,7 @@
                         <button type="button" wire:click="cancel"
                             class="text-sm text-gray-500 hover:text-gray-800">Batal</button>
                         <button
-                            class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">Simpan</button>
+                            class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">Simpan</button>
                     </div>
                 </form>
             </div>

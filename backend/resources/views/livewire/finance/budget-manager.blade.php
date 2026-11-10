@@ -1,5 +1,5 @@
 @php
-    $tabCls = fn($on) => $on ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-400 hover:text-slate-600';
+    $tabCls = fn($on) => $on ? 'border-violet-600 text-violet-700' : 'border-transparent text-slate-400 hover:text-slate-600';
     $tabs = [
         'active' => ['Aktif', $active->count()],
         'finished' => ['Selesai', $finished->count()],
@@ -20,7 +20,7 @@
                 </div>
             </div>
             <button wire:click="$dispatch('open-budget-form')"
-                class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700">+ Tambah
+                class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-violet-700">+ Tambah
                 budget</button>
         </div>
     </x-erp.card>
@@ -41,13 +41,13 @@
                     <div wire:key="bm-{{ $b->id }}" class="flex">
                         <x-erp.budget-card :b="$b" :s="$s" class="w-full">
                             <div class="mt-4 flex items-center gap-4 border-t border-slate-100 pt-3 text-xs">
-                                <button wire:click="toggleHistory({{ $b->id }})" class="font-medium text-blue-600 hover:underline">
+                                <button wire:click="toggleHistory({{ $b->id }})" class="font-medium text-violet-700 hover:underline">
                                     {{ $openId === $b->id ? 'Tutup riwayat' : 'Riwayat' }}
                                 </button>
                                 <button wire:click="$dispatch('open-budget-form', { id: {{ $b->id }} })"
                                     class="text-slate-500 hover:text-slate-900">Ubah</button>
                                 <button wire:click="archive({{ $b->id }})"
-                                    class="ml-auto text-slate-400 hover:text-amber-600">Arsipkan</button>
+                                    class="ml-auto text-slate-400 hover:text-slate-900">Arsipkan</button>
                                 <button wire:click="delete({{ $b->id }})"
                                     wire:confirm="Hapus budget {{ $b->name }} beserta riwayatnya? Tindakan ini tidak bisa dibatalkan."
                                     class="text-slate-400 hover:text-rose-600">Hapus</button>
@@ -75,7 +75,7 @@
                     </div>
                     <div class="flex gap-4 text-xs">
                         <button wire:click="restore({{ $b->id }})"
-                            class="font-medium text-blue-600 hover:underline">Pulihkan</button>
+                            class="font-medium text-violet-700 hover:underline">Pulihkan</button>
                         <button wire:click="delete({{ $b->id }})" wire:confirm="Hapus budget {{ $b->name }} permanen?"
                             class="text-slate-400 hover:text-rose-600">Hapus</button>
                     </div>

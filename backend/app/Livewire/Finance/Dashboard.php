@@ -102,6 +102,7 @@ class Dashboard extends Component
             'income' => $cur['income'],
             'expense' => $cur['expense'],
             'donut' => [
+                'type' => $this->donutType,
                 'labels' => $cats->pluck('name')->all(),
                 'values' => $cats->pluck('total')->map(fn($v) => (int) $v)->all(),
             ],

@@ -34,7 +34,7 @@
                     <tr wire:key="u-{{ $u->id }}">
                         <td class="px-4 py-3">
                             <p class="font-medium">{{ $u->name }} @if($u->isSuperAdmin())<span
-                                class="ml-1 rounded bg-indigo-50 px-1.5 py-0.5 text-xs text-indigo-700">super
+                                class="ml-1 rounded bg-violet-50 px-1.5 py-0.5 text-xs text-violet-800">super
                             admin</span>@endif</p>
                             <p class="text-xs text-gray-500">{{ $u->email }}</p>
                         </td>
@@ -48,13 +48,13 @@
                                 @if($u->status === 'pending')
                                     <button wire:click="approve({{ $u->id }})"
                                         wire:confirm="Aktifkan {{ $u->name }} dengan modul Finance?"
-                                        class="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-indigo-700">Approve</button>
+                                        class="rounded-lg bg-slate-900 px-3 py-1.5 text-xs font-medium text-white hover:bg-violet-700">Approve</button>
                                 @elseif($u->status === 'active')
                                     <button wire:click="suspend({{ $u->id }})" wire:confirm="Tangguhkan {{ $u->name }}?"
                                         class="text-xs text-gray-400 hover:text-rose-600">Suspend</button>
                                 @else
                                     <button wire:click="reactivate({{ $u->id }})"
-                                        class="text-xs text-indigo-600 hover:underline">Aktifkan lagi</button>
+                                        class="text-xs text-violet-700 hover:underline">Aktifkan lagi</button>
                                 @endif
                             @endunless
                         </td>

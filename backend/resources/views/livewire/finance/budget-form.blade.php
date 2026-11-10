@@ -1,7 +1,7 @@
 @php
-    $in = 'mt-1 block w-full rounded-lg border-slate-300 text-sm focus:border-blue-500 focus:ring-blue-500';
+    $in = 'mt-1 block w-full rounded-lg border-slate-300 text-sm focus:border-violet-500 focus:ring-violet-500';
     $rp = fn($n) => 'Rp ' . number_format((int) $n, 0, ',', '.');
-    $segment = fn($on) => $on ? 'bg-blue-600 text-white' : 'text-slate-600 hover:bg-slate-100';
+    $segment = fn($on) => $on ? 'bg-slate-900 text-white' : 'text-slate-600 hover:bg-slate-100';
     $selCats = $categories->whereIn('id', array_map('intval', $categoryIds))->values();
     $selAccs = $accounts->whereIn('id', array_map('intval', $accountIds))->values();
 @endphp
@@ -98,7 +98,7 @@
 
                         <label class="mt-2 flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-2">
                             <input type="checkbox" wire:model.live="allCategories"
-                                class="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                class="mt-0.5 rounded border-slate-300 text-violet-700 focus:ring-violet-500">
                             <span>Semua kategori pengeluaran
                                 <span class="block text-xs text-slate-400">Kategori yang dibuat nanti otomatis ikut
                                     dihitung.</span></span>
@@ -107,7 +107,7 @@
                         @unless($allCategories)
                             <div class="mt-2 flex flex-wrap items-center gap-1.5">
                                 @foreach($selCats->take(3) as $c)
-                                    <span class="rounded-full bg-blue-50 px-2.5 py-1 text-xs text-blue-700">{{ $c->name }}</span>
+                                    <span class="rounded-full bg-violet-50 px-2.5 py-1 text-xs text-violet-800">{{ $c->name }}</span>
                                 @endforeach
                                 @if($selCats->count() > 3)
                                     <span
@@ -118,7 +118,7 @@
                                     <span class="text-xs text-slate-400">Belum ada yang dipilih.</span>
                                 @endif
                                 <button type="button" @click="open = !open"
-                                    class="ml-auto text-xs font-medium text-blue-600 hover:underline"
+                                    class="ml-auto text-xs font-medium text-violet-700 hover:underline"
                                     x-text="open ? 'Tutup daftar' : 'Pilih kategori'"></button>
                             </div>
 
@@ -127,7 +127,7 @@
                                     <input type="search" x-model="q" placeholder="Cari kategori…"
                                         class="min-w-0 flex-1 rounded-lg border-slate-300 text-sm">
                                     <button type="button" wire:click="selectAllCategories"
-                                        class="shrink-0 text-xs font-medium text-blue-600 hover:underline">Semua</button>
+                                        class="shrink-0 text-xs font-medium text-violet-700 hover:underline">Semua</button>
                                     <button type="button" wire:click="clearCategories"
                                         class="shrink-0 text-xs text-slate-500 hover:underline">Kosongkan</button>
                                 </div>
@@ -137,7 +137,7 @@
                                             x-show="!q || $el.dataset.n.includes(q.toLowerCase())"
                                             class="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 hover:bg-slate-50">
                                             <input type="checkbox" wire:model.live="categoryIds" value="{{ $c->id }}"
-                                                class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                                class="rounded border-slate-300 text-violet-700 focus:ring-violet-500">
                                             <span class="truncate">{{ $c->name }}</span>
                                         </label>
                                     @endforeach
@@ -154,7 +154,7 @@
 
                         <label class="mt-2 flex items-start gap-2 rounded-lg bg-slate-50 px-3 py-2">
                             <input type="checkbox" wire:model.live="allAccounts"
-                                class="mt-0.5 rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                class="mt-0.5 rounded border-slate-300 text-violet-700 focus:ring-violet-500">
                             <span>Semua akun
                                 <span class="block text-xs text-slate-400">Akun yang dibuat nanti otomatis ikut
                                     dihitung.</span></span>
@@ -165,7 +165,7 @@
                                 @foreach($accounts as $a)
                                     <label class="flex cursor-pointer items-center gap-2 rounded px-2 py-1.5 hover:bg-slate-50">
                                         <input type="checkbox" wire:model.live="accountIds" value="{{ $a->id }}"
-                                            class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                                            class="rounded border-slate-300 text-violet-700 focus:ring-violet-500">
                                         <span class="truncate">{{ $a->name }}</span>
                                     </label>
                                 @endforeach
@@ -177,7 +177,7 @@
 
                     {{-- petunjuk dari data nyata --}}
                     @if($hint)
-                        <div class="rounded-lg bg-blue-50 px-4 py-3 text-xs leading-relaxed text-blue-900">
+                        <div class="rounded-lg bg-violet-50 px-4 py-3 text-xs leading-relaxed text-violet-950">
                             <p class="font-medium">Petunjuk dari datamu</p>
                             @if($hint['total90'] === 0)
                                 <p class="mt-1">Belum ada pengeluaran yang cocok dalam 90 hari terakhir.</p>
@@ -199,7 +199,7 @@
                         <button type="button" wire:click="close"
                             class="text-sm text-slate-500 hover:text-slate-800">Batal</button>
                         <button wire:loading.attr="disabled" wire:target="save"
-                            class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-60">Simpan</button>
+                            class="rounded-lg bg-slate-900 px-5 py-2 text-sm font-medium text-white hover:bg-violet-700 disabled:opacity-60">Simpan</button>
                     </div>
                 </form>
             </div>
