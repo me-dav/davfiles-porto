@@ -86,18 +86,8 @@
             
         </x-erp.card>
 
-        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
-            <x-erp.stat color="violet" label="Masuk" :value="$rp($totals['income'])" :delta="$deltas['income']"
-                :good-when-up="true" :sub="'Sebelumnya: ' . $rp($prevTotals['income'])" />
-
-            <x-erp.stat color="gold" label="Keluar" :value="$rp($totals['expense'])" :delta="$deltas['expense']"
-                :good-when-up="false" :sub="'Sebelumnya: ' . $rp($prevTotals['expense'])" />
-
-            <x-erp.stat color="ink" label="Selisih" class="col-span-2 sm:col-span-1" :value="($totals['net'] < 0 ? '−' : '+') . $rp($totals['net'])" :delta="$deltas['net']" :good-when-up="true" :sub="'Sebelumnya: ' . ($prevTotals['net'] < 0 ? '−' : '+') . $rp($prevTotals['net'])" />
-            <div class="col-span-3">
+        <div class="grid sm:gap-5">
                 <livewire:finance.budget-strip />
-            </div>
-
         </div>
     </div>
 
