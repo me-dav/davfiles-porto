@@ -18,7 +18,7 @@
 
     <div x-ref="rail" class="no-scrollbar flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2">
         @foreach($items as $it)
-            <div wire:key="bs-{{ $it['b']->id }}" wire:click="$dispatch('open-budget-form', { id: {{ $it['b']->id }} })"
+            <div wire:key="bs-{{ $it['b']->id }}" wire:click="$dispatch('open-budget-detail', { id: {{ $it['b']->id }} })"
                 class="flex w-[85%] shrink-0 cursor-pointer snap-start sm:w-72">
                 <x-erp.budget-card :b="$it['b']" :s="$it['s']" class="w-full" />
             </div>
@@ -32,5 +32,6 @@
         </button>
     </div>
 
+    <livewire:finance.budget-detail />
     <livewire:finance.budget-form />
 </div>

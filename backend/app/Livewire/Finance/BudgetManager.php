@@ -11,6 +11,7 @@ class BudgetManager extends Component
 {
     public string $tab = 'active';     // active | finished | archived
     public ?int $openId = null;        // budget yang riwayatnya sedang dibuka
+    public array $openPeriods = [];    // tanggal mulai periode yang transaksinya di-expand
 
     private function guard(): void
     {
@@ -35,12 +36,22 @@ class BudgetManager extends Component
         abort_unless(in_array($tab, ['active', 'finished', 'archived'], true), 422);
         $this->tab = $tab;
         $this->openId = null;
+        $this->openPeriods = [];
     }
 
     public function toggleHistory(int $id): void
     {
         $this->guard();
         $this->openId = $this->openId === $id ? null : $id;
+        $this->openPeriods = [];
+    }
+
+    public function togglePeriod(string $key): void
+    {
+        $this->guard();
+        $this->openPeriods = in_array($key, $this->openPeriods, true)
+            ? array_values(array_diff($this->openPeriods, [$key]))
+            : [...$this->openPeriods, $key];
     }
 
     public function archive(int $id): void
@@ -83,6 +94,15 @@ class BudgetManager extends Component
         $history = null;
         if ($this->openId && ($open = $all->firstWhere('id', $this->openId))) {
             $history = BudgetService::history($open);
+
+            // transaksi hanya diambil untuk periode yang sedang di-expand
+            $txs = [];
+            foreach ($history['periods'] as $p) {
+                if (in_array($p['key'], $this->openPeriods, true)) {
+                    $txs[$p['key']] = BudgetService::transactions($open, $p['start'], $p['end']);
+                }
+            }
+            $history['txs'] = $txs;
         }
 
         return view('livewire.finance.budget-manager', compact('active', 'finished', 'archived', 'history'));

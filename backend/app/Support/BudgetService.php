@@ -243,6 +243,9 @@ class BudgetService
             $amount = self::amountFor($b, $p['start']);
             $spent = $sums[$i];
             $out[] = [
+                'key' => $p['start']->toDateString(),
+                'start' => $p['start'],
+                'end' => $p['end'],
                 'label' => self::periodLabel($p['start'], $p['end']),
                 'amount' => $amount,
                 'spent' => $spent,
@@ -277,6 +280,17 @@ class BudgetService
             'summary' => $summary,
             'breakdown' => $b->isRecurring() ? [] : self::breakdown($b, $b->starts_on, $b->ends_on),
         ];
+    }
+
+    /** Transaksi pengeluaran yang dihitung ke budget ini pada rentang tertentu, terbaru dulu. */
+    public static function transactions(Budget $b, Carbon $from, Carbon $to, int $limit = 100)
+    {
+        return self::forBudget($b, $from, $to)
+            ->with(['category:id,name', 'account:id,name'])
+            ->orderByDesc('transactions.transacted_at')
+            ->orderByDesc('transactions.id')
+            ->limit($limit)
+            ->get();
     }
 
     /** 5 kategori dengan pengeluaran terbesar di dalam rentang budget. */

@@ -57,7 +57,7 @@
     @endif
 
     {{-- tabel periode --}}
-    <div class="mt-5 overflow-x-auto overscroll-x-contain">
+    <div class="mt-5 overflow-x-auto overscroll-x-contain rounded-lg">
         <table class="w-full text-left text-sm" style="min-width: 560px">
             <thead class="bg-slate-800 text-[11px] font-medium uppercase tracking-wider text-white">
                 <tr>
@@ -68,10 +68,12 @@
                     <th class="px-4 py-3 text-right">Hasil</th>
                 </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
-                @foreach($history['periods'] as $p)
-                    <tr>
+            @foreach($history['periods'] as $p)
+            @php $isOpen = isset($history['txs'][$p['key']]); @endphp
+            <tbody wire:key="bp-{{ $b->id }}-{{ $p['key'] }}" class="border-t border-slate-100">
+                    <tr wire:click="togglePeriod('{{ $p['key'] }}')" class="cursor-pointer hover:bg-slate-50">
                         <td class="px-4 py-3 text-slate-700">
+                            <span class="mr-1 inline-block text-[12px] text-slate-600 transition">Lihat Detail</span>
                             {{ $p['label'] }}
                             @unless($p['finished'])<span
                             class="ml-1 rounded bg-violet-50 px-1.5 py-0.5 text-[10px] font-medium text-violet-800">berjalan</span>@endunless
@@ -90,8 +92,15 @@
                             @endif
                         </td>
                     </tr>
-                @endforeach
+                    @if($isOpen)
+                        <tr>
+                            <td colspan="5" class="bg-slate-50 px-4 py-2">
+                                @include('livewire.finance.partials.budget-transactions', ['txs' => $history['txs'][$p['key']]])
+                            </td>
+                        </tr>
+                    @endif
             </tbody>
+            @endforeach
         </table>
     </div>
 
