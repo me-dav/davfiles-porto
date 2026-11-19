@@ -38,6 +38,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh \
 ENTRYPOINT ["entrypoint.sh"]
 CMD ["php-fpm"]
 
+RUN pecl install redis && docker-php-ext-enable redis
+
 # --- nginx (hanya file statis dari public/) ---
 FROM nginx:alpine AS nginx
 COPY --from=app /var/www/html/public /var/www/html/public
